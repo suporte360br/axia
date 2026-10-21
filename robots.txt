@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /gerador/
+
+Sitemap: https://axia.net.br/sitemap.xml
