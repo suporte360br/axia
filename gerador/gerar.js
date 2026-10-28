@@ -72,6 +72,9 @@ function pagina({ caminho, titulo, descricao, conteudo, imagem = 'og.jpg', tipo 
   <meta name="twitter:description" content="${esc(descricao)}">
   <meta name="twitter:image" content="${SITE}/assets/img/${imagem}">
   <link rel="icon" href="/favicon.ico?v=${V_ICO}" sizes="any">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png?v=${V_ICO}">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96.png?v=${V_ICO}">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-48.png?v=${V_ICO}">
   <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png?v=${V_ICO}">
   <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png?v=${V_ICO}">
   <link rel="manifest" href="/site.webmanifest">
@@ -608,7 +611,7 @@ fs.writeFileSync(path.join(RAIZ, 'sitemap.xml'),
 fs.writeFileSync(path.join(RAIZ, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /gerador/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 fs.writeFileSync(path.join(RAIZ, 'site.webmanifest'), JSON.stringify({
   name: NOME, short_name: NOME, start_url: '/', display: 'standalone', background_color: '#111318', theme_color: '#111318',
-  icons: [{ src: '/assets/img/apple-touch-icon.png', sizes: '180x180', type: 'image/png' }, { src: '/assets/img/icon-512.png', sizes: '512x512', type: 'image/png' }]
+  icons: [{ src: '/assets/img/favicon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/assets/img/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },{ src: '/assets/img/icon-512.png', sizes: '512x512', type: 'image/png' }]
 }, null, 2) + '\n');
 
 console.log(`${Object.keys(paginas).length} páginas geradas (css v=${V_CSS}, js v=${V_JS}).`);
