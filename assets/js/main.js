@@ -52,46 +52,6 @@
   }
 })();
 
-// Anunciar vaga: monta um e-mail com o perfil completo, separado por seções
-(function () {
-  var form = document.getElementById('form-vaga');
-  if (!form) return;
-  var resultado = document.getElementById('resultado-vaga');
-  var texto = document.getElementById('texto-vaga');
-  form.addEventListener('submit', function (e) {
-    e.preventDefault();
-    var linhas = [];
-    form.querySelectorAll('fieldset').forEach(function (fs) {
-      linhas.push('== ' + fs.querySelector('legend').textContent.trim().toUpperCase() + ' ==');
-      fs.querySelectorAll('label').forEach(function (l) {
-        var campo = l.querySelector('input, select, textarea');
-        var valor = campo && campo.value.trim();
-        if (!valor) return;
-        var rotulo = l.firstChild.textContent.trim();
-        linhas.push(campo.tagName === 'TEXTAREA' ? rotulo + ':\n' + valor : rotulo + ': ' + valor);
-      });
-      linhas.push('');
-    });
-    linhas.push('O responsável confirmou que pode compartilhar estas informações e que a vaga não traz exigências discriminatórias.');
-    var d = new FormData(form);
-    var assunto = 'Nova vaga para revisão — ' + d.get('titulo') + ' — ' + d.get('empresa');
-    var corpo = linhas.join('\n');
-    document.getElementById('assunto-vaga').textContent = assunto;
-    texto.value = corpo;
-    resultado.hidden = false;
-    resultado.focus();
-    window.location.href = 'mailto:contato@axia.net.br?subject=' +
-      encodeURIComponent(assunto) + '&body=' + encodeURIComponent(corpo);
-  });
-  document.getElementById('copiar-vaga').addEventListener('click', function () {
-    var aviso = document.getElementById('copiado');
-    texto.select();
-    var ok = function () { aviso.textContent = 'Texto copiado.'; };
-    if (navigator.clipboard) navigator.clipboard.writeText(texto.value).then(ok, function () { document.execCommand('copy'); ok(); });
-    else { document.execCommand('copy'); ok(); }
-  });
-})();
-
 // Ano no rodapé
 (function () {
   var el = document.getElementById('ano');

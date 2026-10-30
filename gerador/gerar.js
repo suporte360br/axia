@@ -4,7 +4,6 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { materias } = require('./conteudo');
-const { vagas } = require('./vagas');
 
 const RAIZ = path.join(__dirname, '..');
 const SITE = 'https://axia.net.br';
@@ -21,8 +20,6 @@ const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(
 const dataBR = d => new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
 // Mais recentes primeiro; na mesma data, vale a ordem do conteudo.js
 const ordenadas = materias.map((m, i) => ({ ...m, i })).sort((a, b) => b.data.localeCompare(a.data) || a.i - b.i);
-// Vagas abertas: ativas e dentro da validade, mais recentes primeiro
-const abertas = vagas.filter(v => v.ativa && v.validade >= HOJE).sort((a, b) => b.publicada.localeCompare(a.publicada));
 
 const svg = d => `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
 const icones = {
@@ -49,7 +46,27 @@ const MENU = [
   ['/blog/', 'Blog'],
 ];
 
-function pagina({ caminho, titulo, descricao, conteudo, imagem = 'og.jpg', tipo = 'website', jsonld = [], semIndex = false, preload = '' }) {
+// Cabeçalho e rodapé da área de gestão de vagas (/gestao/)
+const topoGestao = () => `  <header class="topo topo-gestao">
+    <div class="container">
+      <a class="marca" href="/gestao/painel/" aria-label="Gestão de vagas da AXIA">
+        <img src="/assets/img/logo.png" alt="AXIA" width="62" height="52"><span class="area-nome">Gestão de vagas</span>
+      </a>
+      <nav class="menu-gestao" aria-label="Gestão" data-so-logado hidden>
+        <a href="/gestao/painel/">Vagas</a>
+        <a href="/gestao/gestores/" data-so-admin hidden>Gestores</a>
+        <span id="quem"></span>
+        <button class="botao botao-contorno botao-pequeno" type="button" id="sair">Sair</button>
+      </nav>
+    </div>
+  </header>
+`;
+const rodapeGestao = () => `  <footer class="rodape rodape-gestao">
+    <div class="container base"><span>AXIA · Área restrita aos gestores</span><a href="/">axia.net.br</a></div>
+  </footer>
+`;
+
+function pagina({ caminho, titulo, descricao, conteudo, imagem = 'og.jpg', tipo = 'website', jsonld = [], semIndex = false, preload = '', scripts = '', gestao = false, dataPagina = '' }) {
   const url = SITE + caminho;
   const tituloCompleto = caminho === '/' ? titulo : `${titulo} | ${NOME}`;
   const menu = MENU.map(([href, txt]) => {
@@ -91,9 +108,9 @@ function pagina({ caminho, titulo, descricao, conteudo, imagem = 'og.jpg', tipo 
   ${preload}<link rel="stylesheet" href="/assets/css/style.css?v=${V_CSS}">
   ${ld}
 </head>
-<body>
+<body${dataPagina ? ` data-pagina="${dataPagina}"` : ''}>
   <a class="pular" href="#conteudo">Pular para o conteúdo</a>
-  <header class="topo">
+${gestao ? topoGestao() : `  <header class="topo">
     <div class="container">
       <a class="marca" href="/" aria-label="${NOME}, página inicial">
         <img src="/assets/img/logo.png" alt="AXIA" width="62" height="52">
@@ -109,12 +126,12 @@ function pagina({ caminho, titulo, descricao, conteudo, imagem = 'og.jpg', tipo 
       </nav>
     </div>
   </header>
-
+`}
   <main id="conteudo">
 ${conteudo}
   </main>
 
-  <footer class="rodape">
+${gestao ? rodapeGestao() : `  <footer class="rodape">
     <div class="container">
       <div class="colunas">
         <div>
@@ -146,7 +163,7 @@ ${conteudo}
       </div>
     </div>
   </footer>
-  <script src="/assets/js/main.js?v=${V_JS}" defer></script>
+`}  ${scripts}<script src="/assets/js/main.js?v=${V_JS}" defer></script>
 </body>
 </html>
 `;
@@ -469,302 +486,8 @@ paginas['index.html'] = pagina({
   });
 }
 
-// ---------- Recrutamento e seleção ----------
-const reais = n => n.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 });
-const salarioTexto = v => !v.salarioMin ? 'A combinar'
-  : v.salarioMax && v.salarioMax !== v.salarioMin ? `${reais(v.salarioMin)} a ${reais(v.salarioMax)}` : reais(v.salarioMin);
-const localTexto = v => v.cidade ? `${v.cidade} – ${v.uf} · ${v.modelo}` : v.modelo;
-const empresaTexto = v => v.empresa || 'Empresa confidencial';
-const listaHTML = itens => itens && itens.length ? `<ul>${itens.map(i => `<li>${esc(i)}</li>`).join('')}</ul>` : '';
-const TIPO_CONTRATO = { CLT: 'FULL_TIME', PJ: 'CONTRACTOR', 'Estágio': 'INTERN', 'Temporário': 'TEMPORARY' };
-const AVISO_GOLPE = 'A AXIA não cobra taxas de candidatos em nenhuma etapa do processo seletivo. Desconfie de qualquer pedido de pagamento em nosso nome.';
-
-function cartaoVaga(v) {
-  return `<article class="cartao vaga">
-        <div class="corpo">
-          <span class="tag">${esc(v.area)}</span>
-          <h3><a href="/recrutamento/${v.slug}/">${esc(v.titulo)}</a></h3>
-          <p>${esc(empresaTexto(v))}</p>
-          <ul class="vaga-dados">
-            <li>${icones.mapa}${esc(localTexto(v))}</li>
-            <li>${icones.maleta}${esc(v.contrato)} · ${esc(v.nivel)}</li>
-            <li>${icones.grafico}${esc(salarioTexto(v))}</li>
-          </ul>
-          <span class="meta">Publicada em <time datetime="${v.publicada}">${dataBR(v.publicada)}</time> · ${esc(v.codigo)}</span>
-        </div>
-      </article>`;
-}
-
-// Recrutamento (portal)
-{
-  const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção']]);
-  const jsonld = [t.ld];
-  if (abertas.length) jsonld.push({
-    '@context': 'https://schema.org', '@type': 'ItemList', name: 'Vagas abertas',
-    itemListElement: abertas.map((v, i) => ({ '@type': 'ListItem', position: i + 1, url: `${SITE}/recrutamento/${v.slug}/` }))
-  });
-  const listagem = abertas.length
-    ? `<div class="grade grade-3">
-      ${abertas.map(cartaoVaga).join('\n      ')}
-        </div>`
-    : `<div class="vazio">
-          <div class="icone">${icones.maleta}</div>
-          <h3>Nenhuma vaga aberta no momento</h3>
-          <p>Novas oportunidades em segurança da informação e tecnologia são publicadas aqui. Se quiser, envie seu currículo para o nosso banco de talentos.</p>
-          <a class="botao botao-contorno" href="mailto:${EMAIL}?subject=${encodeURIComponent('Banco de talentos')}">Enviar currículo</a>
-        </div>`;
-  paginas['recrutamento/index.html'] = pagina({
-    caminho: '/recrutamento/',
-    titulo: 'Recrutamento e seleção: vagas em segurança e tecnologia',
-    descricao: 'Vagas em segurança da informação e tecnologia selecionadas pela AXIA. Empresas podem enviar o perfil da vaga para revisão, publicação e divulgação.',
-    jsonld,
-    conteudo: `
-    <section class="cabecalho-pagina">
-      <div class="container">
-        ${t.html}
-        <h1>Recrutamento e seleção</h1>
-        <p>Vagas em segurança da informação, tecnologia e conformidade. Empresas enviam o perfil da vaga, a AXIA revisa, publica e divulga para os profissionais certos.</p>
-        <div class="acoes" style="margin-top:24px">
-          <a class="botao botao-laranja" href="/recrutamento/anunciar-vaga/">Anunciar uma vaga</a>
-          <a class="botao botao-contorno" href="#vagas">Ver vagas abertas</a>
-        </div>
-      </div>
-    </section>
-
-    <section class="secao" id="vagas" aria-labelledby="vagas-titulo">
-      <div class="container">
-        <div class="secao-cabeca">
-          <span class="sobretitulo">Para profissionais</span>
-          <h2 id="vagas-titulo">Vagas abertas</h2>
-          <p>Para se candidatar, abra a vaga e envie o currículo pelo botão de candidatura, informando o código da vaga.</p>
-        </div>
-        ${listagem}
-        <p class="aviso">${AVISO_GOLPE}</p>
-      </div>
-    </section>
-
-    <section class="secao faixa" aria-labelledby="empresas-titulo">
-      <div class="container">
-        <div class="secao-cabeca">
-          <span class="sobretitulo">Para empresas</span>
-          <h2 id="empresas-titulo">Anuncie sua vaga com a AXIA</h2>
-          <p>Você envia o perfil completo da vaga. Nós cuidamos do restante até os candidatos chegarem.</p>
-        </div>
-        <div class="grade grade-4">
-          <div class="etapa"><span class="num destaque">01</span><h3>Envie o perfil</h3><p>Preencha o formulário com a empresa, a vaga, os requisitos, a remuneração e as etapas do processo.</p></div>
-          <div class="etapa"><span class="num destaque">02</span><h3>Revisamos</h3><p>Ajustamos o texto, conferimos requisitos técnicos e certificações e alinhamos dúvidas com você.</p></div>
-          <div class="etapa"><span class="num destaque">03</span><h3>Publicamos</h3><p>A vaga ganha uma página própria neste portal, preparada para aparecer nas buscas de vagas do Google.</p></div>
-          <div class="etapa"><span class="num destaque">04</span><h3>Divulgamos</h3><p>Compartilhamos com a nossa rede de profissionais e, se combinado, fazemos a triagem dos currículos.</p></div>
-        </div>
-        <p style="margin-top:32px"><a class="botao botao-laranja" href="/recrutamento/anunciar-vaga/">Enviar o perfil da vaga</a></p>
-      </div>
-    </section>
-
-    <section class="secao" aria-labelledby="porque-titulo">
-      <div class="container">
-        <div class="secao-cabeca">
-          <span class="sobretitulo">Por que a AXIA</span>
-          <h2 id="porque-titulo">Seleção feita por quem entende da área</h2>
-        </div>
-        <div class="grade grade-3">
-          <div class="servico"><div class="icone">${icones.escudo}</div><h3>Especialistas em segurança e tecnologia</h3><p>Sabemos diferenciar um analista de SOC de um especialista em GRC e o que cada certificação realmente indica.</p></div>
-          <div class="servico"><div class="icone">${icones.documento}</div><h3>Vagas claras e atrativas</h3><p>Descrições objetivas, com requisitos realistas e faixa salarial, atraem candidatos mais alinhados.</p></div>
-          <div class="servico"><div class="icone">${icones.cadeado}</div><h3>Sigilo quando precisar</h3><p>A vaga pode ser publicada como confidencial, sem revelar o nome da empresa até as etapas finais.</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="secao" style="padding-top:0">
-      <div class="container">
-        <div class="chamada">
-          <div>
-            <h2>Tem uma vaga para preencher?</h2>
-            <p>Envie o perfil completo. Retornamos em dias úteis com a revisão e a proposta de divulgação.</p>
-          </div>
-          <a class="botao botao-laranja" href="/recrutamento/anunciar-vaga/">Anunciar uma vaga</a>
-        </div>
-      </div>
-    </section>`
-  });
-}
-
-// Recrutamento: formulário para empresas enviarem o perfil da vaga
-{
-  const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção'], ['/recrutamento/anunciar-vaga/', 'Anunciar uma vaga']]);
-  const opcoes = itens => itens.map(o => `<option>${o}</option>`).join('');
-  const escolha = itens => '<option value="">Selecione</option>' + opcoes(itens);
-  paginas['recrutamento/anunciar-vaga/index.html'] = pagina({
-    caminho: '/recrutamento/anunciar-vaga/',
-    titulo: 'Anunciar uma vaga',
-    descricao: 'Envie o perfil completo da vaga para a AXIA revisar, publicar no portal de recrutamento e divulgar para profissionais de segurança e tecnologia.',
-    jsonld: [t.ld],
-    conteudo: `
-    <section class="cabecalho-pagina">
-      <div class="container">
-        ${t.html}
-        <h1>Anunciar uma vaga</h1>
-        <p>Preencha o perfil completo da vaga. A AXIA revisa as informações, entra em contato para alinhar os detalhes e, com a sua aprovação, publica e divulga.</p>
-      </div>
-    </section>
-    <section class="secao">
-      <div class="container" style="max-width:880px">
-        <form class="formulario form-vaga" id="form-vaga" aria-label="Perfil da vaga">
-          <fieldset>
-            <legend>1. Empresa</legend>
-            <div class="duas">
-              <label>Nome da empresa<input name="empresa" required autocomplete="organization"></label>
-              <label>CNPJ <small>(opcional)</small><input name="cnpj" inputmode="numeric"></label>
-              <label>Site <small>(opcional)</small><input name="site" type="url" placeholder="https://"></label>
-              <label>Segmento<input name="segmento" placeholder="Ex.: tecnologia, saúde, varejo"></label>
-              <label>Porte
-                <select name="porte">${opcoes(['Até 50 funcionários', '51 a 200 funcionários', '201 a 1.000 funcionários', 'Mais de 1.000 funcionários'])}</select>
-              </label>
-              <label>Divulgar o nome da empresa?
-                <select name="divulgacao">${opcoes(['Sim, pode divulgar', 'Não, vaga confidencial'])}</select>
-              </label>
-            </div>
-            <label>Sobre a empresa <small>(o que o candidato deve saber)</small><textarea name="sobre" rows="3"></textarea></label>
-          </fieldset>
-
-          <fieldset>
-            <legend>2. Responsável pela vaga</legend>
-            <div class="duas">
-              <label>Nome<input name="responsavel" required autocomplete="name"></label>
-              <label>Cargo<input name="cargo_responsavel" autocomplete="organization-title"></label>
-              <label>E-mail<input name="email" type="email" required autocomplete="email"></label>
-              <label>Telefone ou WhatsApp<input name="telefone" type="tel" autocomplete="tel"></label>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>3. A vaga</legend>
-            <div class="duas">
-              <label>Título do cargo<input name="titulo" required placeholder="Ex.: Analista de Segurança da Informação Pleno"></label>
-              <label>Área
-                <select name="area" required>${escolha(['Segurança da informação', 'Governança, riscos e conformidade (GRC)', 'Privacidade e LGPD', 'Infraestrutura e nuvem', 'Desenvolvimento de software', 'Dados e BI', 'Gestão de tecnologia', 'Suporte e service desk', 'Outra área'])}</select>
-              </label>
-              <label>Nível
-                <select name="nivel" required>${escolha(['Estágio', 'Júnior', 'Pleno', 'Sênior', 'Especialista', 'Coordenação ou gerência', 'Diretoria'])}</select>
-              </label>
-              <label>Quantidade de vagas<input name="quantidade" type="number" min="1" value="1"></label>
-              <label>Tipo de contratação
-                <select name="contrato" required>${escolha(['CLT', 'PJ', 'Estágio', 'Temporário', 'A definir'])}</select>
-              </label>
-              <label>Modelo de trabalho
-                <select name="modelo" required>${escolha(['Presencial', 'Híbrido', 'Remoto'])}</select>
-              </label>
-              <label>Cidade e estado<input name="local" placeholder="Ex.: São Paulo – SP"></label>
-              <label>Jornada e horário<input name="jornada" placeholder="Ex.: 40 h semanais, 9h às 18h"></label>
-              <label>Faixa salarial mensal<input name="salario" placeholder="Ex.: R$ 9.000 a R$ 12.000"></label>
-              <label>Publicar a faixa salarial?
-                <select name="publicar_salario">${opcoes(['Sim', 'Não, informar só aos candidatos selecionados'])}</select>
-              </label>
-            </div>
-            <label>Benefícios<textarea name="beneficios" rows="3" placeholder="Vale-refeição, plano de saúde, auxílio home office, bônus…"></textarea></label>
-          </fieldset>
-
-          <fieldset>
-            <legend>4. Descrição</legend>
-            <label>Resumo da vaga<textarea name="resumo" rows="3" required placeholder="Em poucas frases: o objetivo do cargo e o contexto do time."></textarea></label>
-            <label>Principais responsabilidades<textarea name="responsabilidades" rows="5" required placeholder="Uma por linha"></textarea></label>
-            <label>Requisitos obrigatórios<textarea name="requisitos" rows="5" required placeholder="Experiência, conhecimentos técnicos, ferramentas. Um por linha."></textarea></label>
-            <label>Diferenciais <small>(opcional)</small><textarea name="diferenciais" rows="3" placeholder="Um por linha"></textarea></label>
-            <div class="duas">
-              <label>Formação e certificações<input name="formacao" placeholder="Ex.: superior em TI; CISSP, ISO 27001 LA"></label>
-              <label>Idiomas<input name="idiomas" placeholder="Ex.: inglês intermediário"></label>
-            </div>
-          </fieldset>
-
-          <fieldset>
-            <legend>5. Processo seletivo</legend>
-            <div class="duas">
-              <label>Como receber as candidaturas
-                <select name="candidaturas">${opcoes(['A AXIA faz a triagem e envia os melhores perfis', 'Encaminhar todos os currículos para a empresa', 'Candidatos se inscrevem no site da empresa'])}</select>
-              </label>
-              <label>Link de inscrição <small>(se houver)</small><input name="link_inscricao" type="url" placeholder="https://"></label>
-              <label>Data desejada para contratação<input name="prazo" type="date"></label>
-              <label>Publicar a vaga até<input name="validade" type="date"></label>
-            </div>
-            <label>Etapas do processo<textarea name="etapas" rows="3" placeholder="Ex.: triagem, entrevista com RH, teste técnico, entrevista com o gestor"></textarea></label>
-            <label>Observações <small>(opcional)</small><textarea name="observacoes" rows="3"></textarea></label>
-          </fieldset>
-
-          <label class="confirma"><input type="checkbox" name="consentimento" required> <span>Confirmo que posso compartilhar estas informações com a AXIA e que a vaga não traz exigências discriminatórias (como idade, gênero, estado civil ou aparência).</span></label>
-          <button class="botao botao-primario" type="submit">Enviar vaga para revisão</button>
-          <small>Ao enviar, o seu programa de e-mail abre com o perfil da vaga pronto para ${EMAIL}. Nada é gravado neste site (veja a <a href="/privacidade/">política de privacidade</a>).</small>
-        </form>
-
-        <div class="resultado-vaga" id="resultado-vaga" hidden tabindex="-1">
-          <h2>Quase lá: confirme o envio no seu e-mail</h2>
-          <p>Se o programa de e-mail não abriu, ou se o texto chegou cortado, copie o perfil abaixo e envie para <a href="mailto:${EMAIL}">${EMAIL}</a> com o assunto <strong id="assunto-vaga"></strong>.</p>
-          <textarea id="texto-vaga" rows="12" readonly aria-label="Perfil da vaga em texto"></textarea>
-          <p><button class="botao botao-primario" type="button" id="copiar-vaga">Copiar o texto</button> <span id="copiado" role="status"></span></p>
-        </div>
-      </div>
-    </section>`
-  });
-}
-
-// Recrutamento: páginas das vagas abertas
-for (const v of abertas) {
-  const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção'], [`/recrutamento/${v.slug}/`, v.titulo]]);
-  const blocos = [
-    ['Responsabilidades', v.responsabilidades], ['Requisitos', v.requisitos], ['Diferenciais', v.diferenciais], ['Benefícios', v.beneficios]
-  ].filter(([, itens]) => itens && itens.length);
-  const descricaoHTML = `<p>${esc(v.resumo)}</p>` + (v.sobreEmpresa ? `<p>${esc(v.sobreEmpresa)}</p>` : '') +
-    blocos.map(([h, itens]) => `<h3>${h}</h3>${listaHTML(itens)}`).join('');
-  const vaga = {
-    '@context': 'https://schema.org', '@type': 'JobPosting',
-    title: v.titulo, description: descricaoHTML,
-    identifier: { '@type': 'PropertyValue', name: NOME, value: v.codigo },
-    datePosted: v.publicada, validThrough: `${v.validade}T23:59:59-03:00`,
-    employmentType: TIPO_CONTRATO[v.contrato] || 'OTHER',
-    hiringOrganization: v.empresa ? { '@type': 'Organization', name: v.empresa } : { '@type': 'Organization', name: NOME, sameAs: SITE + '/', logo: SITE + '/assets/img/icon-512.png' },
-    directApply: false,
-    industry: v.area
-  };
-  if (v.cidade) vaga.jobLocation = { '@type': 'Place', address: { '@type': 'PostalAddress', addressLocality: v.cidade, addressRegion: v.uf, addressCountry: 'BR' } };
-  if (v.modelo === 'Remoto') {
-    vaga.jobLocationType = 'TELECOMMUTE';
-    vaga.applicantLocationRequirements = { '@type': 'Country', name: 'Brasil' };
-  }
-  if (v.salarioMin) vaga.baseSalary = {
-    '@type': 'MonetaryAmount', currency: 'BRL',
-    value: { '@type': 'QuantitativeValue', minValue: v.salarioMin, maxValue: v.salarioMax || v.salarioMin, unitText: 'MONTH' }
-  };
-  const assunto = encodeURIComponent(`Candidatura ${v.codigo} — ${v.titulo}`);
-  paginas[`recrutamento/${v.slug}/index.html`] = pagina({
-    caminho: `/recrutamento/${v.slug}/`,
-    titulo: `Vaga: ${v.titulo}`,
-    descricao: `${v.titulo} · ${localTexto(v)} · ${v.contrato}. ${v.resumo}`.slice(0, 160),
-    jsonld: [t.ld, vaga],
-    conteudo: `
-    <article class="artigo">
-      ${t.html}
-      <span class="tag">${esc(v.area)}</span>
-      <h1 style="margin-top:12px">${esc(v.titulo)}</h1>
-      <p class="meta">${esc(empresaTexto(v))} · Publicada em <time datetime="${v.publicada}">${dataBR(v.publicada)}</time></p>
-      <dl class="ficha">
-        <div><dt>Código</dt><dd>${esc(v.codigo)}</dd></div>
-        <div><dt>Local</dt><dd>${esc(localTexto(v))}</dd></div>
-        <div><dt>Contratação</dt><dd>${esc(v.contrato)}</dd></div>
-        <div><dt>Nível</dt><dd>${esc(v.nivel)}</dd></div>
-        <div><dt>Salário</dt><dd>${esc(salarioTexto(v))}</dd></div>
-        <div><dt>Inscrições até</dt><dd>${dataBR(v.validade)}</dd></div>
-      </dl>
-      <h2>Sobre a vaga</h2>
-      <p>${esc(v.resumo)}</p>
-      ${v.sobreEmpresa ? `<h2>Sobre a empresa</h2>\n      <p>${esc(v.sobreEmpresa)}</p>` : ''}
-      ${blocos.map(([h, itens]) => `<h2>${h}</h2>\n      ${listaHTML(itens)}`).join('\n      ')}
-      <div class="chamada" style="margin-top:40px;padding:32px">
-        <div><h2 style="font-size:1.4rem">Quer se candidatar?</h2><p>Envie o currículo em PDF com o código <strong>${esc(v.codigo)}</strong> no assunto.</p></div>
-        <a class="botao botao-laranja" href="mailto:${EMAIL}?subject=${assunto}">Candidatar-se</a>
-      </div>
-      <p class="aviso">${AVISO_GOLPE}</p>
-      <p><a href="/recrutamento/">← Ver todas as vagas</a></p>
-    </article>`
-  });
-}
+// Recrutamento e seleção (portal público e área de gestão): ver recrutamento.js
+Object.assign(paginas, require('./recrutamento')({ pagina, trilha, esc, icones, SITE, NOME, EMAIL }));
 
 // Blog (listagem)
 {
@@ -861,7 +584,7 @@ for (const m of ordenadas) {
       <h2>Para que usamos</h2>
       <p>Usamos os dados apenas para responder ao seu contato e, se houver contratação, para prestar os serviços combinados.</p>
       <h2>Recrutamento e seleção</h2>
-      <p>O formulário de anúncio de vagas também só abre o seu programa de e-mail; recebemos o perfil da vaga e os dados do responsável apenas para revisar, publicar e divulgar a vaga combinada. Currículos enviados por candidatos são usados no processo seletivo da vaga indicada e compartilhados somente com a empresa contratante dessa vaga. Quem enviar currículo ao banco de talentos pode pedir a exclusão a qualquer momento.</p>
+      <p>O formulário de anúncio de vagas grava o descritivo da vaga e os dados do responsável (nome, cargo, e-mail e telefone) em um banco de dados protegido, acessível só aos gestores da AXIA, para revisar, aprovar, publicar e divulgar a vaga. Os dados de contato do responsável nunca aparecem no anúncio público. Se a empresa escolher vaga confidencial, o nome dela também não é publicado. O formulário guarda um rascunho apenas no seu navegador até o envio. Currículos enviados por candidatos são usados no processo seletivo da vaga indicada e compartilhados somente com a empresa contratante dessa vaga. Quem enviar currículo ao banco de talentos pode pedir a exclusão a qualquer momento.</p>
       <h2>Compartilhamento</h2>
       <p>Não vendemos nem compartilhamos seus dados com terceiros para fins de marketing. Eles podem ser compartilhados apenas quando necessário para o serviço ou por obrigação legal.</p>
       <h2>Seus direitos</h2>
@@ -901,13 +624,6 @@ paginas['legal-notice/index.html'] = redirecionar('/privacidade/');
 paginas['blog-single-page-layout/index.html'] = redirecionar('/blog/');
 
 // ---------- Gravação ----------
-// Remove as páginas de vagas encerradas
-const dirVagas = path.join(RAIZ, 'recrutamento');
-if (fs.existsSync(dirVagas)) {
-  for (const d of fs.readdirSync(dirVagas, { withFileTypes: true })) {
-    if (d.isDirectory() && !paginas[`recrutamento/${d.name}/index.html`]) fs.rmSync(path.join(dirVagas, d.name), { recursive: true });
-  }
-}
 for (const [arq, html] of Object.entries(paginas)) {
   const destino = path.join(RAIZ, arq);
   fs.mkdirSync(path.dirname(destino), { recursive: true });
@@ -917,14 +633,13 @@ for (const [arq, html] of Object.entries(paginas)) {
 const urls = [
   ['/', '1.0'], ['/servicos/', '0.9'], ['/blog/', '0.8'], ['/sobre/', '0.6'], ['/contato/', '0.6'], ['/privacidade/', '0.2'],
   ['/recrutamento/', '0.8'], ['/recrutamento/anunciar-vaga/', '0.6'],
-  ...abertas.map(v => [`/recrutamento/${v.slug}/`, '0.7', v.publicada]),
   ...ordenadas.map(m => [`/blog/${m.slug}/`, '0.7', m.data])
 ];
 fs.writeFileSync(path.join(RAIZ, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
   urls.map(([u, p, d]) => `  <url><loc>${SITE}${u}</loc><lastmod>${d || HOJE}</lastmod><priority>${p}</priority></url>`).join('\n') +
   `\n</urlset>\n`);
-fs.writeFileSync(path.join(RAIZ, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /gerador/\n\nSitemap: ${SITE}/sitemap.xml\n`);
+fs.writeFileSync(path.join(RAIZ, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /gerador/\nDisallow: /gestao/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 fs.writeFileSync(path.join(RAIZ, 'site.webmanifest'), JSON.stringify({
   name: NOME, short_name: NOME, start_url: '/', display: 'standalone', background_color: '#111318', theme_color: '#111318',
   icons: [{ src: '/assets/img/favicon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/assets/img/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },{ src: '/assets/img/icon-512.png', sizes: '512x512', type: 'image/png' }]

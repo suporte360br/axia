@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Revisar vaga · Gestão | AXIA</title>
+  <meta name="description" content="Área restrita aos gestores da AXIA.">
+  <link rel="canonical" href="https://axia.net.br/gestao/vaga/">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#111318">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="AXIA">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Revisar vaga · Gestão">
+  <meta property="og:description" content="Área restrita aos gestores da AXIA.">
+  <meta property="og:url" content="https://axia.net.br/gestao/vaga/">
+  <meta property="og:image" content="https://axia.net.br/assets/img/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Revisar vaga · Gestão">
+  <meta name="twitter:description" content="Área restrita aos gestores da AXIA.">
+  <meta name="twitter:image" content="https://axia.net.br/assets/img/og.jpg">
+  <link rel="icon" href="/favicon.ico?v=a3b95a1a" sizes="any">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png?v=a3b95a1a">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96.png?v=a3b95a1a">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-48.png?v=a3b95a1a">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png?v=a3b95a1a">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png?v=a3b95a1a">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css?v=04006d65">
+  
+</head>
+<body data-pagina="revisao">
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <header class="topo topo-gestao">
+    <div class="container">
+      <a class="marca" href="/gestao/painel/" aria-label="Gestão de vagas da AXIA">
+        <img src="/assets/img/logo.png" alt="AXIA" width="62" height="52"><span class="area-nome">Gestão de vagas</span>
+      </a>
+      <nav class="menu-gestao" aria-label="Gestão" data-so-logado hidden>
+        <a href="/gestao/painel/">Vagas</a>
+        <a href="/gestao/gestores/" data-so-admin hidden>Gestores</a>
+        <span id="quem"></span>
+        <button class="botao botao-contorno botao-pequeno" type="button" id="sair">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <div class="faixa-demo" id="faixa-demo" hidden>Modo demonstração: as vagas ficam só neste navegador.</div>
+    <section class="secao secao-gestao">
+      <div class="container">
+        <p><a href="/gestao/painel/">← Voltar para as vagas</a></p>
+        <div id="carregando-vaga"><p class="carregando">Carregando…</p></div>
+        <div id="revisao" hidden>
+          <div class="cabeca-gestao">
+            <div>
+              <span class="status" id="status-vaga"></span>
+              <h1 id="titulo-vaga"></h1>
+              <p id="meta-vaga"></p>
+            </div>
+            <div class="acoes-revisao">
+              <button class="botao botao-contorno" type="button" data-acao="salvar">Salvar revisão</button>
+              <button class="botao botao-laranja" type="button" data-acao="aprovada">Aprovar e publicar</button>
+              <button class="botao botao-contorno" type="button" data-acao="reprovada">Reprovar</button>
+              <button class="botao botao-contorno" type="button" data-acao="encerrada">Encerrar</button>
+              <button class="botao botao-contorno" type="button" data-acao="pendente">Voltar para aprovação</button>
+            </div>
+          </div>
+          <p id="msg" class="msg" hidden role="alert"></p>
+          <div class="revisao-grade">
+            <div>
+              <div class="caixa" id="caixa-padrao">
+                <h2>Conferência do padrão AXIA</h2>
+                <ul class="checklist" id="checklist"></ul>
+              </div>
+              <h2 class="titulo-form">Descritivo <small>(edite o que for preciso e salve)</small></h2>
+              <form class="formulario form-vaga" id="form-vaga" novalidate aria-label="Descritivo da vaga">
+          <fieldset>
+            <legend><span class="num-secao">1</span>Empresa</legend>
+            <div class="duas">
+              <label>Nome da empresa<input name="empresa.nome" required maxlength="150" autocomplete="organization"></label>
+              <label>CNPJ <small>(opcional)</small><input name="empresa.cnpj" inputmode="numeric" maxlength="20"></label>
+              <label>Site <small>(opcional)</small><input name="empresa.site" type="url" maxlength="200" placeholder="https://"></label>
+              <label>Segmento<input name="empresa.segmento" maxlength="80" placeholder="Ex.: banco digital, saúde, varejo"></label>
+              <label>Porte<select name="empresa.porte"><option value="">Selecione</option><option>Até 50 funcionários</option><option>51 a 200 funcionários</option><option>201 a 1.000 funcionários</option><option>Mais de 1.000 funcionários</option></select></label>
+              <label>Divulgar o nome da empresa?<select name="empresa.confidencial" data-tipo="bool"><option value="false">Sim, pode divulgar</option><option value="true">Não, vaga confidencial</option></select></label>
+            </div>
+            <label>Sobre a empresa<textarea name="empresa.sobre" rows="3" maxlength="1500" placeholder="O que o candidato precisa saber sobre a empresa e o time."></textarea></label>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">2</span>A vaga e o tipo de trabalho</legend>
+            <div class="duas">
+              <label>Título do cargo <small>sem gênero</small><input name="vaga.titulo" required maxlength="120" placeholder="Ex.: Analista de Segurança da Informação Pleno"></label>
+              <label>Área<select name="vaga.area" required><option value="">Selecione</option><option>Segurança da informação</option><option>Governança, riscos e conformidade (GRC)</option><option>Privacidade e LGPD</option><option>Infraestrutura e nuvem</option><option>Desenvolvimento de software</option><option>Dados e BI</option><option>Gestão de tecnologia</option><option>Suporte e service desk</option><option>Outra área</option></select></label>
+              <label>Nível<select name="vaga.nivel" required><option value="">Selecione</option><option>Estágio</option><option>Júnior</option><option>Pleno</option><option>Sênior</option><option>Especialista</option><option>Coordenação ou gerência</option><option>Diretoria</option></select></label>
+              <label>Quantidade de vagas<input name="vaga.quantidade" data-tipo="num" type="number" min="1" max="99" value="1"></label>
+              <label>Tipo de contratação<select name="vaga.contrato" required><option value="">Selecione</option><option>CLT</option><option>PJ</option><option>Estágio</option><option>Temporário</option><option>Freelancer</option></select></label>
+              <label>Modelo de trabalho<select name="vaga.modelo" required><option value="">Selecione</option><option>Presencial</option><option>Híbrido</option><option>Remoto</option></select></label>
+              <label>Dias presenciais <small>se híbrido</small><input name="vaga.dias_presenciais" maxlength="60" placeholder="Ex.: 2 dias por semana"></label>
+              <label>Cidade<input name="vaga.cidade" maxlength="80" placeholder="Ex.: São Paulo"></label>
+              <label>Estado<select name="vaga.uf"><option value="">Selecione</option><option>AC</option><option>AL</option><option>AP</option><option>AM</option><option>BA</option><option>CE</option><option>DF</option><option>ES</option><option>GO</option><option>MA</option><option>MT</option><option>MS</option><option>MG</option><option>PA</option><option>PB</option><option>PR</option><option>PE</option><option>PI</option><option>RJ</option><option>RN</option><option>RS</option><option>RO</option><option>RR</option><option>SC</option><option>SP</option><option>SE</option><option>TO</option></select></label>
+              <label>Jornada e horário<input name="vaga.jornada" maxlength="120" placeholder="Ex.: 40 h semanais, 9h às 18h"></label>
+              <label>Viagens<select name="vaga.viagens"><option>Não</option><option>Eventuais</option><option>Frequentes</option></select></label>
+              <label>Vaga afirmativa <small>(opcional)</small><select name="vaga.afirmativa"><option>Não</option><option>Pessoas com deficiência (PcD)</option><option>Mulheres</option><option>Pessoas negras</option><option>Pessoas 50+</option><option>Pessoas LGBTQIA+</option></select></label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">3</span>Remuneração e benefícios</legend>
+            <div class="duas">
+              <label>Salário mensal mínimo (R$)<input name="remuneracao.salario_min" data-tipo="num" type="number" min="1" step="1" required placeholder="Ex.: 9000"></label>
+              <label>Salário mensal máximo (R$)<input name="remuneracao.salario_max" data-tipo="num" type="number" min="1" step="1" placeholder="Ex.: 12000"></label>
+              <label>Publicar a faixa salarial?<select name="remuneracao.publicar_salario" data-tipo="bool"><option value="true">Sim, publicar</option><option value="false">Não, informar só aos selecionados</option></select></label>
+            </div>
+            <label>Benefícios <small>um por linha</small><textarea name="remuneracao.beneficios" data-tipo="lista" rows="4" maxlength="2000" placeholder="Um por linha. Ex.:
+Vale-refeição
+Plano de saúde
+Auxílio home office"></textarea></label>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">4</span>Missão e responsabilidades</legend>
+            <label>Resumo da vaga<textarea name="descricao.resumo" rows="3" required minlength="30" maxlength="1500" placeholder="Em poucas frases: o objetivo do cargo, o time e o contexto."></textarea></label>
+            <label>Principais responsabilidades <small>pelo menos 3, uma por linha</small><textarea name="descricao.responsabilidades" data-tipo="lista" data-minimo="3" rows="5" required maxlength="4000" placeholder="Uma por linha, começando por verbo. Ex.:
+Monitorar e tratar alertas do SIEM
+Conduzir a gestão de vulnerabilidades"></textarea></label>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">5</span>Hard skills</legend>
+            <p class="dica-secao">Conhecimentos técnicos: ferramentas, tecnologias, normas e métodos. Informe pelo menos 3, com o nível exigido.</p>
+            <div class="linhas" data-linhas="requisitos.hard_skills" data-minimo="3">
+              <div class="linhas-itens"></div>
+              <button type="button" class="botao-linha" data-adicionar>+ Adicionar hard skill</button>
+              <template><div class="linha"><input data-campo="nome" maxlength="80" placeholder="Ex.: SIEM (Splunk ou QRadar)" aria-label="Hard skill"><select data-campo="nivel" aria-label="Nível exigido"><option>Básico</option><option>Intermediário</option><option>Avançado</option><option>Especialista</option></select><select data-campo="obrigatorio" data-tipo="bool" aria-label="Obrigatória ou desejável"><option value="true">Obrigatória</option><option value="false">Desejável</option></select><button type="button" class="remover" data-remover aria-label="Remover linha">×</button></div></template>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">6</span>Soft skills</legend>
+            <p class="dica-secao">Competências comportamentais. Escolha de 2 a 6 que realmente fazem diferença no cargo.</p>
+            <div class="chips" data-multi="requisitos.soft_skills">
+              <label class="chip"><input type="checkbox" value="Comunicação clara"> Comunicação clara</label>
+              <label class="chip"><input type="checkbox" value="Trabalho em equipe"> Trabalho em equipe</label>
+              <label class="chip"><input type="checkbox" value="Resolução de problemas"> Resolução de problemas</label>
+              <label class="chip"><input type="checkbox" value="Pensamento analítico"> Pensamento analítico</label>
+              <label class="chip"><input type="checkbox" value="Organização"> Organização</label>
+              <label class="chip"><input type="checkbox" value="Proatividade"> Proatividade</label>
+              <label class="chip"><input type="checkbox" value="Aprendizado contínuo"> Aprendizado contínuo</label>
+              <label class="chip"><input type="checkbox" value="Gestão do tempo"> Gestão do tempo</label>
+              <label class="chip"><input type="checkbox" value="Negociação"> Negociação</label>
+              <label class="chip"><input type="checkbox" value="Liderança"> Liderança</label>
+              <label class="chip"><input type="checkbox" value="Ética e confidencialidade"> Ética e confidencialidade</label>
+              <label class="chip"><input type="checkbox" value="Atenção aos detalhes"> Atenção aos detalhes</label>
+              <label class="chip"><input type="checkbox" value="Calma sob pressão"> Calma sob pressão</label>
+              <label class="chip"><input type="checkbox" value="Visão de negócio"> Visão de negócio</label>
+              <label class="chip"><input type="checkbox" value="Adaptabilidade"> Adaptabilidade</label>
+            </div>
+            <label>Outras soft skills <small>(opcional)</small><input data-extra="requisitos.soft_skills" maxlength="200" placeholder="Separe por vírgula"></label>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">7</span>Experiência, formação e idiomas</legend>
+            <div class="duas">
+              <label>Experiência mínima (anos)<input name="requisitos.experiencia_anos" data-tipo="num" type="number" min="0" max="40" required placeholder="0 se não exige"></label>
+              <label>Escolaridade mínima<select name="requisitos.escolaridade" required><option value="">Selecione</option><option>Ensino médio</option><option>Ensino técnico</option><option>Superior em andamento</option><option>Superior completo</option><option>Pós-graduação</option><option>Mestrado ou doutorado</option></select></label>
+            </div>
+            <label>Experiências indispensáveis <small>uma por linha</small><textarea name="requisitos.experiencias" data-tipo="lista" rows="3" maxlength="2000" placeholder="Uma por linha. Ex.:
+Atuação em SOC ou time de resposta a incidentes"></textarea></label>
+            <label>Área de formação <small>(opcional)</small><input name="requisitos.formacao" maxlength="150" placeholder="Ex.: Ciência da Computação, Sistemas de Informação ou áreas afins"></label>
+            <div class="sublinha"><strong>Certificações</strong> <small>(opcional)</small></div>
+            <div class="linhas" data-linhas="requisitos.certificacoes" data-minimo="0">
+              <div class="linhas-itens"></div>
+              <button type="button" class="botao-linha" data-adicionar>+ Adicionar certificação</button>
+              <template><div class="linha"><input data-campo="nome" maxlength="80" placeholder="Ex.: CompTIA Security+" aria-label="Certificação"><select data-campo="obrigatorio" data-tipo="bool" aria-label="Obrigatória ou desejável"><option value="true">Obrigatória</option><option value="false">Desejável</option></select><button type="button" class="remover" data-remover aria-label="Remover linha">×</button></div></template>
+            </div>
+            <div class="sublinha"><strong>Idiomas</strong> <small>(opcional)</small></div>
+            <div class="linhas" data-linhas="requisitos.idiomas" data-minimo="0">
+              <div class="linhas-itens"></div>
+              <button type="button" class="botao-linha" data-adicionar>+ Adicionar idioma</button>
+              <template><div class="linha"><input data-campo="idioma" maxlength="40" placeholder="Ex.: Inglês" aria-label="Idioma"><select data-campo="nivel" aria-label="Nível do idioma"><option>Básico</option><option>Intermediário</option><option>Avançado</option><option>Fluente</option></select><button type="button" class="remover" data-remover aria-label="Remover linha">×</button></div></template>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">8</span>Conhecimentos desejáveis</legend>
+            <label>Diferenciais <small>um por linha</small><textarea name="requisitos.desejaveis" data-tipo="lista" rows="3" maxlength="2000" placeholder="Um por linha. Contam pontos, mas não eliminam ninguém."></textarea></label>
+          </fieldset>
+
+          <fieldset>
+            <legend><span class="num-secao">9</span>Processo seletivo</legend>
+            <div class="duas">
+              <label>Como receber as candidaturas<select name="processo.candidaturas"><option value="triagem_axia">A AXIA faz a triagem e envia os melhores perfis</option><option value="todos">Encaminhar todos os currículos para a empresa</option><option value="site_empresa">Candidatos se inscrevem no site da empresa</option></select></label>
+              <label>Link de inscrição <small>se for no site da empresa</small><input name="processo.link" type="url" maxlength="300" placeholder="https://"></label>
+              <label>Data desejada para contratação <small>(opcional)</small><input name="processo.prazo" type="date"></label>
+              <label>Publicar a vaga até <small>se vazio, 60 dias</small><input name="processo.validade" type="date"></label>
+            </div>
+            <label>Etapas do processo <small>uma por linha</small><textarea name="processo.etapas" data-tipo="lista" rows="4" required maxlength="1500" placeholder="Uma por linha. Ex.:
+Triagem de currículos
+Entrevista com RH
+Teste técnico
+Entrevista com o gestor"></textarea></label>
+          </fieldset>
+
+        </form>
+            </div>
+            <aside class="lateral-revisao">
+              <div class="caixa">
+                <h2>Contato da empresa</h2>
+                <dl class="contato" id="contato"></dl>
+                <p class="acoes"><a class="botao botao-contorno botao-pequeno" id="email-ajustes" href="#">Pedir ajustes por e-mail</a></p>
+              </div>
+              <div class="caixa" id="caixa-publica" hidden>
+                <h2>Publicação</h2>
+                <p>Publicada em <span id="publicada-em"></span>, até <span id="validade-pub"></span>.</p>
+                <p><a id="link-publico" href="#" target="_blank" rel="noopener">Abrir a página da vaga</a></p>
+              </div>
+              <div class="caixa">
+                <h2>Motivo / ajustes pedidos</h2>
+                <textarea id="motivo" rows="3" maxlength="2000" placeholder="Obrigatório para reprovar. Vai no e-mail para a empresa."></textarea>
+              </div>
+              <div class="caixa">
+                <h2>Notas internas</h2>
+                <textarea id="notas" rows="4" maxlength="4000" placeholder="Só os gestores veem."></textarea>
+              </div>
+              <div class="caixa">
+                <h2>Histórico</h2>
+                <ol class="historico" id="historico"></ol>
+              </div>
+            </aside>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape rodape-gestao">
+    <div class="container base"><span>AXIA · Área restrita aos gestores</span><a href="/">axia.net.br</a></div>
+  </footer>
+  <script src="/assets/js/config.js?v=0c7fea6c"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+  <script src="/assets/js/recrutamento.js?v=008b799c" defer></script>
+  <script src="/assets/js/gestao.js?v=081e26fe" defer></script>
+  <script src="/assets/js/main.js?v=d2b55230" defer></script>
+</body>
+</html>

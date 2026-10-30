@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vagas · Gestão | AXIA</title>
+  <meta name="description" content="Área restrita aos gestores da AXIA.">
+  <link rel="canonical" href="https://axia.net.br/gestao/painel/">
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#111318">
+  <meta property="og:locale" content="pt_BR">
+  <meta property="og:site_name" content="AXIA">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Vagas · Gestão">
+  <meta property="og:description" content="Área restrita aos gestores da AXIA.">
+  <meta property="og:url" content="https://axia.net.br/gestao/painel/">
+  <meta property="og:image" content="https://axia.net.br/assets/img/og.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Vagas · Gestão">
+  <meta name="twitter:description" content="Área restrita aos gestores da AXIA.">
+  <meta name="twitter:image" content="https://axia.net.br/assets/img/og.jpg">
+  <link rel="icon" href="/favicon.ico?v=a3b95a1a" sizes="any">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/img/favicon-192.png?v=a3b95a1a">
+  <link rel="icon" type="image/png" sizes="96x96" href="/assets/img/favicon-96.png?v=a3b95a1a">
+  <link rel="icon" type="image/png" sizes="48x48" href="/assets/img/favicon-48.png?v=a3b95a1a">
+  <link rel="icon" type="image/png" sizes="32x32" href="/assets/img/favicon-32.png?v=a3b95a1a">
+  <link rel="apple-touch-icon" href="/assets/img/apple-touch-icon.png?v=a3b95a1a">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=Inter:wght@400;500;600;700&display=swap">
+  <link rel="stylesheet" href="/assets/css/style.css?v=04006d65">
+  
+</head>
+<body data-pagina="painel">
+  <a class="pular" href="#conteudo">Pular para o conteúdo</a>
+  <header class="topo topo-gestao">
+    <div class="container">
+      <a class="marca" href="/gestao/painel/" aria-label="Gestão de vagas da AXIA">
+        <img src="/assets/img/logo.png" alt="AXIA" width="62" height="52"><span class="area-nome">Gestão de vagas</span>
+      </a>
+      <nav class="menu-gestao" aria-label="Gestão" data-so-logado hidden>
+        <a href="/gestao/painel/">Vagas</a>
+        <a href="/gestao/gestores/" data-so-admin hidden>Gestores</a>
+        <span id="quem"></span>
+        <button class="botao botao-contorno botao-pequeno" type="button" id="sair">Sair</button>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo">
+
+    <div class="faixa-demo" id="faixa-demo" hidden>Modo demonstração: as vagas ficam só neste navegador.</div>
+    <section class="secao secao-gestao">
+      <div class="container">
+        <div class="cabeca-gestao">
+          <div><h1>Vagas</h1><p>Vagas enviadas pelas empresas, da mais recente para a mais antiga.</p></div>
+          <a class="botao botao-contorno" href="/recrutamento/" target="_blank" rel="noopener">Ver o portal público</a>
+        </div>
+        <div class="abas" role="tablist" id="abas">
+          <button role="tab" data-status="pendente" aria-selected="true">Aguardando aprovação <span></span></button>
+          <button role="tab" data-status="em_revisao" aria-selected="false">Em revisão <span></span></button>
+          <button role="tab" data-status="aprovada" aria-selected="false">Publicadas <span></span></button>
+          <button role="tab" data-status="reprovada" aria-selected="false">Reprovadas <span></span></button>
+          <button role="tab" data-status="encerrada" aria-selected="false">Encerradas <span></span></button>
+          <button role="tab" data-status="" aria-selected="false">Todas <span></span></button>
+        </div>
+        <label class="busca">Buscar<input id="busca" type="search" placeholder="Cargo, empresa, código ou e-mail"></label>
+        <div id="tabela-vagas" aria-live="polite"><p class="carregando">Carregando…</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="rodape rodape-gestao">
+    <div class="container base"><span>AXIA · Área restrita aos gestores</span><a href="/">axia.net.br</a></div>
+  </footer>
+  <script src="/assets/js/config.js?v=0c7fea6c"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+  <script src="/assets/js/recrutamento.js?v=008b799c" defer></script>
+  <script src="/assets/js/gestao.js?v=081e26fe" defer></script>
+  <script src="/assets/js/main.js?v=d2b55230" defer></script>
+</body>
+</html>
