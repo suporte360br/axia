@@ -200,6 +200,7 @@ ${gestao ? '' : `
           <a class="botao botao-laranja" href="/recrutamento/anunciar-vaga/">Anunciar uma vaga</a>
           <a class="botao botao-contorno" href="#vagas">Ver vagas abertas</a>
         </div>
+        <a class="acesso-admin" href="/gestao/" rel="nofollow">${icones.cadeado}Acesso administrativo <small>(gestores AXIA)</small></a>
       </div>
     </section>
 
@@ -251,6 +252,11 @@ ${gestao ? '' : `
           <div class="servico"><div class="icone">${icones.escudo}</div><h3>Especialistas em segurança e tecnologia</h3><p>Sabemos diferenciar um analista de SOC de um especialista em GRC e o que cada certificação realmente indica.</p></div>
           <div class="servico"><div class="icone">${icones.documento}</div><h3>Vagas claras e atrativas</h3><p>O padrão AXIA de descritivo deixa claros os requisitos, a faixa salarial e o tipo de trabalho, e atrai candidatos mais alinhados.</p></div>
           <div class="servico"><div class="icone">${icones.cadeado}</div><h3>Sigilo quando precisar</h3><p>A vaga pode ser publicada como confidencial, sem revelar o nome da empresa até as etapas finais.</p></div>
+        </div>
+        <div class="faixa-admin">
+          <div class="icone">${icones.cadeado}</div>
+          <div><strong>Acesso administrativo</strong><p>Área restrita aos gestores da AXIA para revisar, aprovar e publicar as vagas enviadas.</p></div>
+          <a class="botao botao-contorno" href="/gestao/" rel="nofollow">Entrar na gestão</a>
         </div>
       </div>
     </section>`

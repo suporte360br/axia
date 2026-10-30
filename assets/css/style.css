@@ -363,3 +363,11 @@ dialog h2 { margin: 0; font-size: 1.3rem; }
 dialog .acoes { display: flex; gap: 10px; }
 @media (max-width: 760px) { .menu-gestao #quem { display: none; } .marca .area-nome { display: none; } }
 .tabela td:first-child { white-space: nowrap; }
+.acesso-admin { display: inline-flex; align-items: center; gap: 8px; margin-top: 18px; font-size: .92rem; font-weight: 600; color: var(--aco); text-decoration: none; }
+.acesso-admin:hover { color: var(--laranja-escuro); }
+.acesso-admin svg { width: 16px; height: 16px; }
+.acesso-admin small { font-weight: 400; color: var(--suave); }
+.faixa-admin { margin-top: 32px; display: flex; flex-wrap: wrap; align-items: center; gap: 16px; padding: 20px 24px; border: 1px dashed #cfd4dc; border-radius: var(--raio); background: #fff; }
+.faixa-admin .icone { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: var(--aco-claro); color: var(--aco); flex: none; }
+.faixa-admin > div:nth-child(2) { flex: 1 1 260px; }
+.faixa-admin p { margin: 2px 0 0; color: var(--suave); font-size: .92rem; }
