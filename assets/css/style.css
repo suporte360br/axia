@@ -238,3 +238,27 @@ p { margin: 0 0 1em; }
 .numeros strong { font-family: var(--titulo); font-size: 1.15rem; color: var(--tinta); display: block; }
 .numeros span { color: var(--suave); font-size: .95rem; }
 .placa { padding: 24px 40px; }
+
+/* Recrutamento e seleção */
+.cabecalho-pagina .acoes { display: flex; flex-wrap: wrap; gap: 12px; }
+.vaga-dados { list-style: none; padding: 0; margin: 4px 0 6px; display: grid; gap: 6px; font-size: .92rem; color: var(--texto); }
+.vaga-dados li { display: flex; align-items: center; gap: 8px; }
+.vaga-dados svg { width: 16px; height: 16px; color: var(--laranja-escuro); flex: none; }
+.vazio { background: #fff; border: 1px dashed #cfd4dc; border-radius: var(--raio); padding: 44px 28px; text-align: center; display: grid; justify-items: center; gap: 4px; }
+.vazio .icone { width: 54px; height: 54px; border-radius: 14px; display: grid; place-items: center; background: var(--laranja-claro); color: var(--laranja-escuro); margin-bottom: 8px; }
+.vazio h3 { margin: 0; }
+.vazio p { max-width: 34em; color: var(--suave); margin: 4px 0 16px; }
+.ficha { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1px; background: var(--linha); border: 1px solid var(--linha); border-radius: var(--raio); overflow: hidden; margin: 0 0 32px; }
+.ficha div { background: #fff; padding: 14px 18px; }
+.ficha dt { font-size: .78rem; text-transform: uppercase; letter-spacing: .04em; color: var(--suave); }
+.ficha dd { margin: 2px 0 0; font-weight: 600; color: var(--tinta); }
+.form-vaga { gap: 28px; }
+.form-vaga fieldset { border: 0; padding: 0; margin: 0; display: grid; gap: 16px; min-width: 0; }
+.form-vaga legend { font-family: var(--titulo); font-size: 1.25rem; font-weight: 600; color: var(--tinta); padding: 0 0 12px; border-bottom: 2px solid var(--laranja); margin-bottom: 4px; width: 100%; }
+.form-vaga .duas { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 16px; }
+.form-vaga textarea { min-height: 0; }
+.formulario .confirma { display: flex; gap: 10px; align-items: flex-start; font-weight: 400; color: var(--texto); }
+.formulario .confirma input { width: 18px; height: 18px; margin-top: 3px; flex: none; accent-color: var(--laranja); }
+.resultado-vaga { margin-top: 28px; background: var(--laranja-claro); border: 1px solid #f5c79e; border-radius: var(--raio); padding: 28px; }
+.resultado-vaga h2 { margin-top: 0; font-size: 1.35rem; }
+.resultado-vaga textarea { width: 100%; font: .9rem/1.5 ui-monospace, Consolas, monospace; padding: 12px; border: 1px solid #e6b98f; border-radius: 10px; background: #fff; color: var(--tinta); }
