@@ -29,9 +29,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=Inter:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="/assets/css/style.css?v=a9a1f803">
+  <link rel="stylesheet" href="/assets/css/style.css?v=74456638">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://axia.net.br/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://axia.net.br/blog/"},{"@type":"ListItem","position":3,"name":"Plano de continuidade de negócios: como montar o seu","item":"https://axia.net.br/blog/plano-de-continuidade-de-negocios/"}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Plano de continuidade de negócios: como montar o seu","description":"Passo a passo para criar um plano de continuidade de negócios: análise de impacto, estratégias de recuperação, papéis, comunicação e testes.","inLanguage":"pt-BR","image":"https://axia.net.br/assets/img/og.jpg","datePublished":"2026-10-19","dateModified":"2026-10-19","mainEntityOfPage":"https://axia.net.br/blog/plano-de-continuidade-de-negocios/","author":{"@type":"Organization","name":"AXIA","url":"https://axia.net.br/"},"publisher":{"@id":"https://axia.net.br/#organizacao"},"articleSection":"Continuidade"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Plano de continuidade de negócios: como montar o seu","description":"Passo a passo para criar um plano de continuidade de negócios: análise de impacto, estratégias de recuperação, papéis, comunicação e testes.","inLanguage":"pt-BR","image":"https://axia.net.br/assets/img/og.jpg","datePublished":"2026-10-19","dateModified":"2026-11-04","mainEntityOfPage":"https://axia.net.br/blog/plano-de-continuidade-de-negocios/","author":{"@type":"Person","name":"Rogério Gomes","jobTitle":"Fundador da AXIA","url":"https://axia.net.br/sobre/#rogerio-gomes","worksFor":{"@id":"https://axia.net.br/#organizacao"}},"publisher":{"@id":"https://axia.net.br/#organizacao"},"articleSection":"Continuidade"}</script>
 </head>
 <body>
   <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -62,7 +62,7 @@
       <nav class="trilha" aria-label="Você está em"><ol><li><a href="/">Início</a></li><li><a href="/blog/">Blog</a></li><li aria-current="page">Plano de continuidade de negócios: como montar o seu</li></ol></nav>
       <span class="tag">Continuidade</span>
       <h1 style="margin-top:12px">Plano de continuidade de negócios: como montar o seu</h1>
-      <p class="meta">Publicado em <time datetime="2026-10-19">19 de outubro de 2026</time> · por AXIA</p>
+      <p class="meta">Por <a href="/sobre/#rogerio-gomes">Rogério Gomes</a> · Publicado em <time datetime="2026-10-19">19 de outubro de 2026</time> · Atualizado em <time datetime="2026-11-04">4 de novembro de 2026</time></p>
       <div class="placa capa" aria-hidden="true"><div><small>Continuidade</small><strong>Plano de continuidade de negócios</strong></div></div>
       <p>Um ataque de ransomware, uma queda do provedor de nuvem, um incêndio ou a saída repentina de uma pessoa-chave: qualquer um desses eventos pode parar a operação. O <strong>plano de continuidade de negócios (PCN)</strong> define como a empresa continua funcionando, mesmo em modo reduzido, até tudo voltar ao normal.</p>
 
@@ -85,10 +85,42 @@
 
 <h2>5. Testes</h2>
 <p>Plano que nunca foi testado é só uma intenção. Faça ao menos um <strong>exercício de mesa</strong> por ano, simulando um cenário realista, e teste a restauração de backups com regularidade. Cada teste revela ajustes que tornam o plano mais confiável.</p>
+<h2 id="rto-rpo">RTO e RPO na prática</h2>
+<p>Dois números orientam todo o plano:</p>
+<ul>
+<li><strong>RTO (tempo objetivo de recuperação):</strong> quanto tempo o processo pode ficar parado antes de o prejuízo ficar inaceitável.</li>
+<li><strong>RPO (ponto objetivo de recuperação):</strong> quanto de informação a empresa aceita perder, medido em tempo. Um RPO de 24 horas significa aceitar perder o que foi feito no último dia.</li>
+</ul>
+<p>Exemplo: se o sistema de pedidos tem RTO de 4 horas e RPO de 1 hora, um backup que roda uma vez por noite e leva 12 horas para restaurar não atende. Ou o processo muda, com cópias mais frequentes e um ambiente de contingência pronto, ou a diretoria aceita, de forma consciente, um risco maior. A BIA serve justamente para tornar essa decisão explícita.</p>
+
+<h2 id="testes">Tipos de teste, do mais simples ao mais completo</h2>
+<ol>
+<li><strong>Revisão do plano:</strong> leitura em grupo para conferir contatos, papéis e passos.</li>
+<li><strong>Exercício de mesa:</strong> simulação guiada de um cenário, como ransomware ou queda do fornecedor de nuvem, com a liderança discutindo as decisões.</li>
+<li><strong>Teste técnico parcial:</strong> restaurar um sistema crítico a partir do backup e medir o tempo.</li>
+<li><strong>Teste completo:</strong> ativar a contingência de verdade, em uma janela planejada.</li>
+</ol>
+<p>Comece pelos mais simples e aumente a complexidade aos poucos. Todo teste gera uma lista de melhorias, e é ela que mantém o plano útil.</p>
+
+<h2 id="erros">Erros comuns</h2>
+<ul>
+<li>Plano de 200 páginas que ninguém consegue usar no meio de uma crise.</li>
+<li>Lista de contatos desatualizada, ou guardada só no sistema que parou.</li>
+<li>Backup no mesmo ambiente que pode ser criptografado por um ataque.</li>
+<li>Esquecer fornecedores críticos e pessoas-chave, não só a tecnologia.</li>
+<li>Nunca testar.</li>
+</ul>
+
+<h2 id="referencias">Referências</h2>
+<ul class="referencias"><li><a href="https://www.iso.org/standard/75106.html" target="_blank" rel="noopener">ISO 22301:2019 — sistemas de gestão de continuidade de negócios</a></li><li><a href="https://csrc.nist.gov/pubs/sp/800/34/r1/upd1/final" target="_blank" rel="noopener">NIST SP 800-34 Rev. 1 — planejamento de contingência</a></li><li><a href="https://www.cisa.gov/stopransomware/ransomware-guide" target="_blank" rel="noopener">CISA — #StopRansomware Guide</a></li></ul>
 <p class="aviso">Este conteúdo é informativo e não substitui a análise do caso concreto da sua empresa. Normas e exigências regulatórias mudam: confira a versão em vigor antes de decidir.</p>
+      <aside class="autor" aria-label="Sobre o autor">
+        <div class="autor-inicial" aria-hidden="true">RG</div>
+        <div><strong><a href="/sobre/#rogerio-gomes">Rogério Gomes</a></strong> <span>· Fundador da AXIA</span><p>Fundador da AXIA, consultoria em segurança da informação, tecnologia, privacidade e conformidade. Atua como CISO e CTO como serviço, apoiando empresas a estruturar programas de segurança, adequação à LGPD e preparação para ISO 27001 e SOC 2.</p></div>
+      </aside>
       <div class="chamada" style="margin-top:40px;padding:32px">
-        <div><h2 style="font-size:1.4rem">Precisa de ajuda com segurança ou tecnologia?</h2><p>Converse com a AXIA sobre CISO e CTO como serviço, LGPD e conformidade.</p></div>
-        <a class="botao botao-laranja" href="/contato/">Fale conosco</a>
+        <div><h2 style="font-size:1.4rem">Conheça o serviço de Continuidade de negócios</h2><p>Planos para a empresa continuar operando quando algo dá errado, testados antes que seja preciso usá-los.</p></div>
+        <a class="botao botao-laranja" href="/servicos/continuidade-de-negocios/">Ver o serviço</a>
       </div>
       <section class="leia-tambem" aria-labelledby="leia-tambem">
         <h2 id="leia-tambem" style="margin-top:0">Leia também</h2>
@@ -129,7 +161,7 @@
     <div class="container">
       <div class="colunas">
         <div>
-          <img class="logo-rodape" src="/assets/img/simbolo.png" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
+          <img class="logo-rodape" src="/assets/img/simbolo-300.webp" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
           <p>Consultoria em segurança da informação, tecnologia, privacidade e conformidade. CISO e CTO como serviço para empresas que precisam de liderança experiente sem o custo de um executivo em tempo integral.</p>
         </div>
         <div>

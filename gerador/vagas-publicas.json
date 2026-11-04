@@ -1,0 +1,90 @@
+[
+  {
+    "codigo": "AX-0001",
+    "slug": "vaga-de-teste-do-portal-ax-0001",
+    "titulo": "Vaga de teste do portal",
+    "dados": {
+      "vaga": {
+        "uf": "",
+        "area": "Segurança da informação",
+        "nivel": "Pleno",
+        "cidade": "",
+        "modelo": "Remoto",
+        "titulo": "Vaga de teste do portal",
+        "jornada": "",
+        "viagens": "Não",
+        "contrato": "CLT",
+        "afirmativa": "Não",
+        "quantidade": 1,
+        "dias_presenciais": ""
+      },
+      "empresa": {
+        "nome": "TESTE AXIA (pode reprovar)",
+        "site": "axiateste.com.br",
+        "porte": "51 a 200 funcionários",
+        "sobre": "",
+        "segmento": "",
+        "confidencial": false
+      },
+      "processo": {
+        "link": "",
+        "prazo": "",
+        "etapas": [
+          "Teste"
+        ],
+        "validade": "",
+        "candidaturas": "triagem_axia"
+      },
+      "descricao": {
+        "resumo": "Vaga criada só para testar o fluxo de envio e aprovação do portal AXIA.",
+        "responsabilidades": [
+          "Testar o envio",
+          "Testar a revisão",
+          "Testar a aprovação"
+        ]
+      },
+      "requisitos": {
+        "idiomas": [],
+        "formacao": "",
+        "desejaveis": [],
+        "hard_skills": [
+          {
+            "nome": "SIEM",
+            "nivel": "Básico",
+            "obrigatorio": true
+          },
+          {
+            "nome": "Linux",
+            "nivel": "Básico",
+            "obrigatorio": true
+          },
+          {
+            "nome": "Python",
+            "nivel": "Básico",
+            "obrigatorio": true
+          }
+        ],
+        "soft_skills": [
+          "Comunicação clara",
+          "Trabalho em equipe",
+          "Resolução de problemas",
+          "Proatividade",
+          "Ética e confidencialidade",
+          "Calma sob pressão"
+        ],
+        "escolaridade": "Superior completo",
+        "experiencias": [],
+        "certificacoes": [],
+        "experiencia_anos": 2
+      },
+      "remuneracao": {
+        "beneficios": [],
+        "salario_max": 12000,
+        "salario_min": 9000,
+        "publicar_salario": true
+      }
+    },
+    "publicada_em": "2026-10-30T02:36:18.106324+00:00",
+    "validade": "2026-12-28"
+  }
+]

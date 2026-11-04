@@ -4,14 +4,46 @@ const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
 const { materias } = require('./conteudo');
+const { servicos } = require('./servicos');
+const { aprofundamento } = require('./aprofundamento');
+
+// Junta ao corpo da matéria as seções extras e as referências, e completa o sumário
+function corpoCompleto(m) {
+  const a = aprofundamento[m.slug];
+  let corpo = m.corpo.trim();
+  if (!a) return corpo;
+  const extra = a.secoes.map(([, , html]) => html.trim()).join('\n\n') +
+    `\n\n<h2 id="referencias">Referências</h2>\n<ul class="referencias">${a.referencias.map(([nome, url]) => `<li><a href="${url}" target="_blank" rel="noopener">${esc(nome)}</a></li>`).join('')}</ul>`;
+  const aviso = corpo.lastIndexOf('<p class="aviso">');
+  corpo = aviso >= 0 ? corpo.slice(0, aviso) + extra + '\n' + corpo.slice(aviso) : corpo + '\n' + extra;
+  const itens = [...a.secoes.map(([id, rotulo]) => [id, rotulo]), ['referencias', 'Referências']].map(([id, rotulo]) => `<li><a href="#${id}">${esc(rotulo)}</a></li>`).join('\n');
+  return corpo.replace('</ol></nav>', `${itens}\n</ol></nav>`);
+}
 
 const RAIZ = path.join(__dirname, '..');
 const SITE = 'https://axia.net.br';
 const NOME = 'AXIA';
 const EMAIL = 'contato@axia.net.br';
-const HOJE = new Date().toISOString().slice(0, 10);
 
-const hash = f => crypto.createHash('md5').update(fs.readFileSync(path.join(RAIZ, f))).digest('hex').slice(0, 8);
+// Autor das matérias (perfil na página Sobre)
+const AUTOR = {
+  nome: 'Rogério Gomes',
+  cargo: 'Fundador da AXIA',
+  url: '/sobre/#rogerio-gomes',
+  bio: 'Fundador da AXIA, consultoria em segurança da informação, tecnologia, privacidade e conformidade. Atua como CISO e CTO como serviço, apoiando empresas a estruturar programas de segurança, adequação à LGPD e preparação para ISO 27001 e SOC 2.',
+};
+const AUTOR_LD = { '@type': 'Person', name: AUTOR.nome, jobTitle: AUTOR.cargo, url: SITE + AUTOR.url, worksFor: { '@id': SITE + '/#organizacao' } };
+
+// Data da última mudança no texto da política de privacidade (fixa, para o site não mudar a cada geração)
+const PRIVACIDADE_ATUALIZADA = '2026-10-29';
+
+// Vagas aprovadas no Supabase: buscar-vagas.js atualiza vagas-publicas.json (sem conexão, fica o anterior)
+try { require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'buscar-vagas.js')], { stdio: 'inherit' }); } catch { /* segue com o arquivo anterior */ }
+const ARQ_VAGAS = path.join(__dirname, 'vagas-publicas.json');
+const vagasPublicas = fs.existsSync(ARQ_VAGAS) ? JSON.parse(fs.readFileSync(ARQ_VAGAS, 'utf8')) : [];
+
+// Versão do arquivo nos links (?v=); ignora CRLF/LF para dar o mesmo valor no Windows e na GitHub Action
+const hash = f => { const b = fs.readFileSync(path.join(RAIZ, f)); return crypto.createHash('md5').update(/\.(css|js)$/.test(f) ? b.toString('utf8').replace(/\r\n/g, '\n') : b).digest('hex').slice(0, 8); };
 const V_CSS = hash('assets/css/style.css');
 const V_JS = hash('assets/js/main.js');
 const V_ICO = hash('favicon.ico');
@@ -135,7 +167,7 @@ ${gestao ? rodapeGestao() : `  <footer class="rodape">
     <div class="container">
       <div class="colunas">
         <div>
-          <img class="logo-rodape" src="/assets/img/simbolo.png" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
+          <img class="logo-rodape" src="/assets/img/simbolo-300.webp" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
           <p>Consultoria em segurança da informação, tecnologia, privacidade e conformidade. CISO e CTO como serviço para empresas que precisam de liderança experiente sem o custo de um executivo em tempo integral.</p>
         </div>
         <div>
@@ -201,6 +233,7 @@ const ORG = {
   '@type': 'ProfessionalService',
   '@id': SITE + '/#organizacao',
   name: NOME,
+  alternateName: ['AXIA Consultoria', 'AXIA Segurança da Informação'],
   url: SITE + '/',
   logo: SITE + '/assets/img/icon-512.png',
   image: SITE + '/assets/img/og.jpg',
@@ -226,11 +259,15 @@ const SERVICOS = [
     ['Treinamentos sobre golpes e phishing', 'Simulações de engenharia social', 'Mentoria para gestores de TI e segurança']],
 ];
 
-const servicoHTML = ([ic, titulo, texto, itens], comLista) => `<div class="servico">
+const servicoHTML = ([ic, titulo, texto, itens], comLista) => {
+  const url = `/servicos/${servicos[SERVICOS.findIndex(x => x[1] === titulo)].slug}/`;
+  return `<div class="servico">
             <div class="icone">${icones[ic]}</div>
-            <h3>${titulo}</h3>
+            <h3><a href="${url}">${titulo}</a></h3>
             <p>${texto}</p>${comLista ? `\n            <ul>${itens.map(i => `<li>${i}</li>`).join('')}</ul>` : ''}
+            <p class="saiba-mais"><a href="${url}">Saiba mais sobre ${titulo}</a></p>
           </div>`;
+};
 
 const FAQ = [
   ['O que é CISO como Serviço?', 'É ter um diretor de segurança da informação experiente em regime parcial: ele assume o programa de segurança da empresa, define prioridades e responde a clientes e auditores, por uma fração do custo de um executivo em tempo integral.'],
@@ -247,7 +284,7 @@ paginas['index.html'] = pagina({
   caminho: '/',
   titulo: 'AXIA | CISO e CTO como Serviço, segurança da informação e LGPD',
   descricao: 'Consultoria em segurança da informação e tecnologia: CISO como serviço, CTO como serviço, LGPD, ISO 27001, SOC 2 e continuidade de negócios.',
-  preload: '<link rel="preload" as="image" href="/assets/img/simbolo.png">\n  ',
+  preload: '<link rel="preload" as="image" href="/assets/img/simbolo.webp" imagesrcset="/assets/img/simbolo-300.webp 300w, /assets/img/simbolo.webp 600w" imagesizes="(max-width: 760px) 70vw, 480px">\n  ',
   jsonld: [ORG, {
     '@context': 'https://schema.org', '@type': 'WebSite', '@id': SITE + '/#site', url: SITE + '/', name: NOME, inLanguage: 'pt-BR', publisher: { '@id': SITE + '/#organizacao' }
   }, {
@@ -268,7 +305,7 @@ paginas['index.html'] = pagina({
           </div>
           <ul class="pontos"><li>CISO como Serviço</li><li>CTO como Serviço</li><li>LGPD e conformidade</li></ul>
         </div>
-        <img class="simbolo" src="/assets/img/simbolo.png" alt="" width="600" height="480" fetchpriority="high">
+        <img class="simbolo" src="/assets/img/simbolo.webp" srcset="/assets/img/simbolo-300.webp 300w, /assets/img/simbolo.webp 600w" sizes="(max-width: 760px) 70vw, 480px" alt="" width="600" height="480" fetchpriority="high">
       </div>
     </section>
 
@@ -365,7 +402,7 @@ paginas['index.html'] = pagina({
       '@context': 'https://schema.org', '@type': 'ItemList', name: 'Serviços da AXIA',
       itemListElement: SERVICOS.map(([, nome, texto], i) => ({
         '@type': 'ListItem', position: i + 1,
-        item: { '@type': 'Service', name: nome, description: texto, provider: { '@id': SITE + '/#organizacao' } }
+        item: { '@type': 'Service', name: nome, description: texto, url: `${SITE}/servicos/${servicos[i].slug}/`, provider: { '@id': SITE + '/#organizacao' } }
       }))
     }],
     conteudo: `
@@ -398,14 +435,95 @@ paginas['index.html'] = pagina({
   });
 }
 
+// Página de cada serviço
+for (const sv of servicos) {
+  const caminho = `/servicos/${sv.slug}/`;
+  const t = trilha([['/', 'Início'], ['/servicos/', 'Serviços'], [caminho, sv.nome]]);
+  const relacionadas = sv.materias.map(slug => ordenadas.find(m => m.slug === slug)).filter(Boolean);
+  const outros = servicos.filter(x => x !== sv);
+  paginas[`servicos/${sv.slug}/index.html`] = pagina({
+    caminho,
+    titulo: sv.titulo,
+    descricao: sv.descricao,
+    jsonld: [t.ld, {
+      '@context': 'https://schema.org', '@type': 'Service', name: sv.nome, serviceType: sv.nome, description: sv.descricao,
+      url: SITE + caminho, provider: { '@id': SITE + '/#organizacao' }, areaServed: { '@type': 'Country', name: 'Brasil' },
+      hasOfferCatalog: { '@type': 'OfferCatalog', name: `Entregas: ${sv.nome}`, itemListElement: sv.entregas.map(([nome, texto]) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: nome, description: texto } })) }
+    }, {
+      '@context': 'https://schema.org', '@type': 'FAQPage',
+      mainEntity: sv.faq.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } }))
+    }],
+    conteudo: `
+    <section class="cabecalho-pagina">
+      <div class="container">
+        ${t.html}
+        <h1>${esc(sv.nome)}</h1>
+        <p>${esc(sv.chamada)}</p>
+        <div class="acoes" style="margin-top:24px">
+          <a class="botao botao-laranja" href="/contato/?assunto=${encodeURIComponent(sv.assunto)}">Agendar uma conversa</a>
+          <a class="botao botao-contorno" href="#entregas">Ver o que entregamos</a>
+        </div>
+      </div>
+    </section>
+    <section class="secao">
+      <div class="container dupla servico-intro">
+        <div class="texto-longo">${sv.intro}</div>
+        <aside class="caixa-para-quem">
+          <h2>Para quem é</h2>
+          <ul>${sv.paraQuem.map(x => `<li>${esc(x)}</li>`).join('')}</ul>
+        </aside>
+      </div>
+    </section>
+    <section class="secao secao-alt" id="entregas" aria-labelledby="entregas-titulo">
+      <div class="container">
+        <div class="secao-cabeca"><span class="sobretitulo">O que entregamos</span><h2 id="entregas-titulo">${esc(sv.nome)}: entregas</h2></div>
+        <div class="grade grade-3">
+          ${sv.entregas.map(([nome, texto]) => `<div class="servico"><h3>${esc(nome)}</h3><p>${esc(texto)}</p></div>`).join('\n          ')}
+        </div>
+      </div>
+    </section>
+    <section class="secao faixa" aria-labelledby="como-titulo">
+      <div class="container">
+        <div class="secao-cabeca"><span class="sobretitulo">Como funciona</span><h2 id="como-titulo">Do primeiro contato às entregas</h2><p>${esc(sv.formatos)}</p></div>
+        <div class="grade grade-4">
+          ${sv.etapas.map(([nome, texto], i) => `<div class="etapa"><span class="num destaque">0${i + 1}</span><h3>${esc(nome)}</h3><p>${esc(texto)}</p></div>`).join('\n          ')}
+        </div>
+      </div>
+    </section>
+    <section class="secao faq" aria-labelledby="faq-titulo">
+      <div class="container" style="max-width:820px">
+        <div class="secao-cabeca"><span class="sobretitulo">Dúvidas frequentes</span><h2 id="faq-titulo">Perguntas sobre ${esc(sv.nome)}</h2></div>
+        ${sv.faq.map(([q, a]) => `<details><summary>${esc(q)}</summary><p>${esc(a)}</p></details>`).join('\n        ')}
+      </div>
+    </section>
+    ${relacionadas.length ? `<section class="secao secao-alt" aria-labelledby="leia-titulo">
+      <div class="container">
+        <div class="secao-cabeca"><span class="sobretitulo">Blog</span><h2 id="leia-titulo">Para se aprofundar</h2></div>
+        <div class="grade grade-3">
+      ${relacionadas.map(cartaoMateria).join('\n      ')}
+        </div>
+      </div>
+    </section>` : ''}
+    <section class="secao">
+      <div class="container">
+        <div class="chamada">
+          <div><h2>Vamos conversar sobre ${esc(sv.nome)}?</h2><p>Conte o contexto da sua empresa. Retornamos para marcar uma conversa inicial, sem compromisso.</p></div>
+          <a class="botao botao-laranja" href="/contato/?assunto=${encodeURIComponent(sv.assunto)}">Fale conosco</a>
+        </div>
+        <p class="outros-servicos"><strong>Outros serviços:</strong> ${outros.map(x => `<a href="/servicos/${x.slug}/">${esc(x.nome)}</a>`).join(' · ')}</p>
+      </div>
+    </section>`
+  });
+}
+
 // Sobre
 {
   const t = trilha([['/', 'Início'], ['/sobre/', 'Sobre']]);
   paginas['sobre/index.html'] = pagina({
     caminho: '/sobre/',
-    titulo: 'Sobre a AXIA',
+    titulo: 'Sobre a AXIA: consultoria em segurança da informação em São Paulo',
     descricao: 'Conheça a AXIA, consultoria em segurança da informação, tecnologia, privacidade e continuidade de negócios, com CISO e CTO como serviço.',
-    jsonld: [t.ld, ORG],
+    jsonld: [t.ld, ORG, { '@context': 'https://schema.org', ...AUTOR_LD, '@id': SITE + AUTOR.url, description: AUTOR.bio }],
     conteudo: `
     <section class="cabecalho-pagina">
       <div class="container">
@@ -423,7 +541,16 @@ paginas['index.html'] = pagina({
           <p>Trabalhamos de forma personalizada: entendemos o negócio, priorizamos o que mais reduz risco e ajudamos a empresa a provar segurança para clientes, parceiros e reguladores.</p>
           <a class="botao botao-primario" href="/contato/">Fale conosco</a>
         </div>
-        <img src="/assets/img/simbolo.png" alt="Símbolo da AXIA: a letra A em prata cortada por um arco laranja" width="600" height="480" loading="lazy" style="box-shadow:none;max-width:420px;justify-self:center">
+        <img src="/assets/img/simbolo.webp" srcset="/assets/img/simbolo-300.webp 300w, /assets/img/simbolo.webp 600w" sizes="(max-width: 760px) 70vw, 420px" alt="Símbolo da AXIA: a letra A em prata cortada por um arco laranja" width="600" height="480" loading="lazy" style="box-shadow:none;max-width:420px;justify-self:center">
+      </div>
+    </section>
+    <section class="secao" id="rogerio-gomes" style="padding-top:0">
+      <div class="container" style="max-width:820px">
+        <span class="sobretitulo">Quem conduz</span>
+        <div class="autor autor-grande">
+          <div class="autor-inicial" aria-hidden="true">RG</div>
+          <div><h2 style="margin:0">${AUTOR.nome}</h2><p class="meta" style="margin:2px 0 8px">${AUTOR.cargo}</p><p>${AUTOR.bio}</p><p>Assina as matérias do <a href="/blog/">blog da AXIA</a>.</p></div>
+        </div>
       </div>
     </section>
     <section class="secao secao-alt">
@@ -444,7 +571,7 @@ paginas['index.html'] = pagina({
   const t = trilha([['/', 'Início'], ['/contato/', 'Contato']]);
   paginas['contato/index.html'] = pagina({
     caminho: '/contato/',
-    titulo: 'Contato',
+    titulo: 'Fale com a AXIA: CISO e CTO como Serviço, LGPD e ISO 27001',
     descricao: 'Fale com a AXIA sobre CISO ou CTO como serviço, LGPD, ISO 27001, SOC 2 ou continuidade de negócios. E-mail: contato@axia.net.br.',
     jsonld: [t.ld, { '@context': 'https://schema.org', '@type': 'ContactPage', url: SITE + '/contato/', about: { '@id': SITE + '/#organizacao' } }],
     conteudo: `
@@ -487,7 +614,7 @@ paginas['index.html'] = pagina({
 }
 
 // Recrutamento e seleção (portal público e área de gestão): ver recrutamento.js
-Object.assign(paginas, require('./recrutamento')({ pagina, trilha, esc, icones, SITE, NOME, EMAIL }));
+Object.assign(paginas, require('./recrutamento')({ pagina, trilha, esc, icones, SITE, NOME, EMAIL, vagas: vagasPublicas }));
 
 // Blog (listagem)
 {
@@ -537,9 +664,9 @@ for (const m of ordenadas) {
       '@context': 'https://schema.org', '@type': 'BlogPosting',
       headline: m.titulo, description: m.descricao, inLanguage: 'pt-BR',
       image: `${SITE}/assets/img/og.jpg`,
-      datePublished: m.data, dateModified: m.data,
+      datePublished: m.data, dateModified: aprofundamento[m.slug]?.atualizado || m.data,
       mainEntityOfPage: `${SITE}/blog/${m.slug}/`,
-      author: { '@type': 'Organization', name: NOME, url: SITE + '/' },
+      author: AUTOR_LD,
       publisher: { '@id': SITE + '/#organizacao' },
       articleSection: m.tema
     }],
@@ -548,13 +675,17 @@ for (const m of ordenadas) {
       ${t.html}
       <span class="tag">${esc(m.tema)}</span>
       <h1 style="margin-top:12px">${esc(m.titulo)}</h1>
-      <p class="meta">Publicado em <time datetime="${m.data}">${dataBR(m.data)}</time> · por ${NOME}</p>
+      <p class="meta">Por <a href="${AUTOR.url}">${AUTOR.nome}</a> · Publicado em <time datetime="${m.data}">${dataBR(m.data)}</time>${aprofundamento[m.slug] ? ` · Atualizado em <time datetime="${aprofundamento[m.slug].atualizado}">${dataBR(aprofundamento[m.slug].atualizado)}</time>` : ''}</p>
       ${placa(m, ' capa')}
-      ${m.corpo.trim()}
-      <div class="chamada" style="margin-top:40px;padding:32px">
-        <div><h2 style="font-size:1.4rem">Precisa de ajuda com segurança ou tecnologia?</h2><p>Converse com a AXIA sobre CISO e CTO como serviço, LGPD e conformidade.</p></div>
-        <a class="botao botao-laranja" href="/contato/">Fale conosco</a>
-      </div>
+      ${corpoCompleto(m)}
+      <aside class="autor" aria-label="Sobre o autor">
+        <div class="autor-inicial" aria-hidden="true">RG</div>
+        <div><strong><a href="${AUTOR.url}">${AUTOR.nome}</a></strong> <span>· ${AUTOR.cargo}</span><p>${AUTOR.bio}</p></div>
+      </aside>
+      ${(() => { const sv = servicos.find(x => x.slug === aprofundamento[m.slug]?.servico); return `<div class="chamada" style="margin-top:40px;padding:32px">
+        <div><h2 style="font-size:1.4rem">${sv ? `Conheça o serviço de ${esc(sv.nome)}` : 'Precisa de ajuda com segurança ou tecnologia?'}</h2><p>${sv ? esc(sv.chamada) : 'Converse com a AXIA sobre CISO e CTO como serviço, LGPD e conformidade.'}</p></div>
+        <a class="botao botao-laranja" href="${sv ? `/servicos/${sv.slug}/` : '/contato/'}">${sv ? 'Ver o serviço' : 'Fale conosco'}</a>
+      </div>`; })()}
       <section class="leia-tambem" aria-labelledby="leia-tambem">
         <h2 id="leia-tambem" style="margin-top:0">Leia também</h2>
         <div class="grade grade-3" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">
@@ -577,7 +708,7 @@ for (const m of ordenadas) {
     <article class="artigo">
       ${t.html}
       <h1>Política de privacidade</h1>
-      <p class="meta">Atualizada em ${dataBR(HOJE)}</p>
+      <p class="meta">Atualizada em ${dataBR(PRIVACIDADE_ATUALIZADA)}</p>
       <p>Esta política explica como a AXIA trata os dados pessoais de quem visita o site axia.net.br, de acordo com a Lei Geral de Proteção de Dados (Lei 13.709/2018).</p>
       <h2>Quais dados coletamos</h2>
       <p>O site não usa cookies de rastreamento nem ferramentas de publicidade. O formulário de contato não grava dados em servidor: ele apenas abre o seu programa de e-mail com a mensagem pronta. Recebemos somente o que você decidir enviar por e-mail (nome, e-mail, empresa e mensagem).</p>
@@ -630,16 +761,26 @@ for (const [arq, html] of Object.entries(paginas)) {
   fs.writeFileSync(destino, html);
 }
 
+// Remove as páginas fixas de vagas que saíram do ar (encerradas, vencidas ou reprovadas)
+const dirRecrutamento = path.join(RAIZ, 'recrutamento');
+if (fs.existsSync(dirRecrutamento)) {
+  for (const d of fs.readdirSync(dirRecrutamento, { withFileTypes: true })) {
+    if (d.isDirectory() && !paginas[`recrutamento/${d.name}/index.html`]) fs.rmSync(path.join(dirRecrutamento, d.name), { recursive: true });
+  }
+}
+
 const urls = [
-  ['/', '1.0'], ['/servicos/', '0.9'], ['/blog/', '0.8'], ['/sobre/', '0.6'], ['/contato/', '0.6'], ['/privacidade/', '0.2'],
+  ...vagasPublicas.map(v => [`/recrutamento/${v.slug}/`, '0.7', String(v.publicada_em).slice(0, 10)]),
+  ['/', '1.0'], ['/servicos/', '0.9'],
+  ...servicos.map(sv => [`/servicos/${sv.slug}/`, '0.9']), ['/blog/', '0.8'], ['/sobre/', '0.6'], ['/contato/', '0.6'], ['/privacidade/', '0.2'],
   ['/recrutamento/', '0.8'], ['/recrutamento/anunciar-vaga/', '0.6'],
-  ...ordenadas.map(m => [`/blog/${m.slug}/`, '0.7', m.data])
+  ...ordenadas.map(m => [`/blog/${m.slug}/`, '0.7', aprofundamento[m.slug]?.atualizado || m.data])
 ];
 fs.writeFileSync(path.join(RAIZ, 'sitemap.xml'),
   `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
-  urls.map(([u, p, d]) => `  <url><loc>${SITE}${u}</loc><lastmod>${d || HOJE}</lastmod><priority>${p}</priority></url>`).join('\n') +
+  urls.map(([u, p, d]) => `  <url><loc>${SITE}${u}</loc>${d ? `<lastmod>${d}</lastmod>` : ''}<priority>${p}</priority></url>`).join('\n') +
   `\n</urlset>\n`);
-fs.writeFileSync(path.join(RAIZ, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /gerador/\nDisallow: /gestao/\n\nSitemap: ${SITE}/sitemap.xml\n`);
+fs.writeFileSync(path.join(RAIZ, 'robots.txt'), `User-agent: *\nAllow: /\nDisallow: /gerador/\n\nSitemap: ${SITE}/sitemap.xml\n`);
 fs.writeFileSync(path.join(RAIZ, 'site.webmanifest'), JSON.stringify({
   name: NOME, short_name: NOME, start_url: '/', display: 'standalone', background_color: '#111318', theme_color: '#111318',
   icons: [{ src: '/assets/img/favicon-192.png', sizes: '192x192', type: 'image/png' }, { src: '/assets/img/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },{ src: '/assets/img/icon-512.png', sizes: '512x512', type: 'image/png' }]

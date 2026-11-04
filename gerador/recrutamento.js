@@ -6,7 +6,9 @@ const path = require('path');
 const crypto = require('crypto');
 
 const RAIZ = path.join(__dirname, '..');
-const hash = f => crypto.createHash('md5').update(fs.readFileSync(path.join(RAIZ, f))).digest('hex').slice(0, 8);
+const R = require('../assets/js/vaga-render.js');
+// Versão do arquivo nos links (?v=); ignora CRLF/LF para dar o mesmo valor no Windows e na GitHub Action
+const hash = f => { const b = fs.readFileSync(path.join(RAIZ, f)); return crypto.createHash('md5').update(/\.(css|js)$/.test(f) ? b.toString('utf8').replace(/\r\n/g, '\n') : b).digest('hex').slice(0, 8); };
 
 // Opções do padrão AXIA (as mesmas listas valem para o formulário e para a revisão)
 const PORTES = ['Até 50 funcionários', '51 a 200 funcionários', '201 a 1.000 funcionários', 'Mais de 1.000 funcionários'];
@@ -39,10 +41,11 @@ const PADRAO = [
 
 const AVISO_GOLPE = 'A AXIA não cobra taxas de candidatos em nenhuma etapa do processo seletivo. Desconfie de qualquer pedido de pagamento em nosso nome.';
 
-module.exports = ({ pagina, trilha, esc, icones, SITE, NOME, EMAIL }) => {
+module.exports = ({ pagina, trilha, esc, icones, SITE, NOME, EMAIL, vagas = [] }) => {
   const p = {};
   const SCRIPTS = `<script src="/assets/js/config.js?v=${hash('assets/js/config.js')}"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" defer></script>
+  <script src="/assets/js/vaga-render.js?v=${hash('assets/js/vaga-render.js')}" defer></script>
   <script src="/assets/js/recrutamento.js?v=${hash('assets/js/recrutamento.js')}" defer></script>
   `;
   const SCRIPTS_GESTAO = SCRIPTS + `<script src="/assets/js/gestao.js?v=${hash('assets/js/gestao.js')}" defer></script>
@@ -187,7 +190,10 @@ ${gestao ? '' : `
       caminho: '/recrutamento/',
       titulo: 'Recrutamento e seleção: vagas em segurança e tecnologia',
       descricao: 'Vagas em segurança da informação e tecnologia selecionadas pela AXIA. Empresas enviam o descritivo da vaga para revisão, aprovação e divulgação.',
-      jsonld: [t.ld],
+      jsonld: vagas.length ? [t.ld, {
+        '@context': 'https://schema.org', '@type': 'ItemList', name: 'Vagas abertas',
+        itemListElement: vagas.map((v, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE + R.urlVaga(v.slug, true) }))
+      }] : [t.ld],
       scripts: SCRIPTS,
       dataPagina: 'vagas',
       conteudo: `
@@ -211,7 +217,10 @@ ${gestao ? '' : `
           <h2 id="vagas-titulo">Vagas abertas</h2>
           <p>Abra a vaga para ver os requisitos completos e se candidatar.</p>
         </div>
-        <div id="lista-vagas" aria-live="polite"><p class="carregando">Carregando vagas…</p></div>
+        <div id="lista-vagas" aria-live="polite">${vagas.length
+          ? `<div class="grade grade-3">${vagas.map(v => R.cartaoVaga(v, true)).join('\n      ')}</div>`
+          : '<p class="carregando">Carregando vagas…</p>'}</div>
+        <script>window.AXIA_VAGAS_ESTATICAS = ${JSON.stringify(vagas.map(v => v.slug))};</script>
         <noscript><p>Para ver as vagas, ative o JavaScript do navegador ou escreva para <a href="mailto:${EMAIL}">${EMAIL}</a>.</p></noscript>
         <template id="sem-vagas">
           <div class="vazio">
@@ -263,19 +272,39 @@ ${gestao ? '' : `
     });
   }
 
-  // Página de cada vaga aprovada: /recrutamento/vaga/?v=<slug>
+  // Página dinâmica /recrutamento/vaga/?v=<slug>: mostra a vaga recém-aprovada até a página fixa ser gerada
   {
     const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção'], ['/recrutamento/vaga/', 'Vaga']]);
     p['recrutamento/vaga/index.html'] = pagina({
       caminho: '/recrutamento/vaga/',
       titulo: 'Vaga',
       descricao: 'Vaga em segurança da informação e tecnologia publicada pela AXIA.',
+      semIndex: true,
       scripts: SCRIPTS,
       dataPagina: 'vaga',
       conteudo: `
     <article class="artigo vaga-publica">
       ${t.html}
       <div id="vaga" aria-live="polite"><p class="carregando">Carregando a vaga…</p></div>
+      <script>window.AXIA_VAGAS_ESTATICAS = ${JSON.stringify(vagas.map(v => v.slug))};</script>
+      <p class="aviso">${AVISO_GOLPE}</p>
+      <p><a href="/recrutamento/">← Ver todas as vagas</a></p>
+    </article>`
+    });
+  }
+
+  // Página fixa de cada vaga aprovada: /recrutamento/<slug>/ (HTML pronto e JobPosting para o Google Vagas)
+  for (const v of vagas) {
+    const caminho = R.urlVaga(v.slug, true);
+    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção'], [caminho, v.titulo]]);
+    const { titulo, descricao } = R.metaVaga(v);
+    p[`recrutamento/${v.slug}/index.html`] = pagina({
+      caminho, titulo, descricao,
+      jsonld: [t.ld, R.jsonLdVaga(v)],
+      conteudo: `
+    <article class="artigo vaga-publica">
+      ${t.html}
+      ${R.vagaHTML(v)}
       <p class="aviso">${AVISO_GOLPE}</p>
       <p><a href="/recrutamento/">← Ver todas as vagas</a></p>
     </article>`

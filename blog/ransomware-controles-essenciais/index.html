@@ -29,9 +29,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=Inter:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="/assets/css/style.css?v=a9a1f803">
+  <link rel="stylesheet" href="/assets/css/style.css?v=74456638">
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://axia.net.br/"},{"@type":"ListItem","position":2,"name":"Blog","item":"https://axia.net.br/blog/"},{"@type":"ListItem","position":3,"name":"Ransomware: 10 controles essenciais para proteger sua empresa","item":"https://axia.net.br/blog/ransomware-controles-essenciais/"}]}</script>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Ransomware: 10 controles essenciais para proteger sua empresa","description":"Dez controles práticos que reduzem muito o risco e o impacto de um ataque de ransomware, do MFA ao backup imutável e ao plano de resposta.","inLanguage":"pt-BR","image":"https://axia.net.br/assets/img/og.jpg","datePublished":"2026-10-17","dateModified":"2026-10-17","mainEntityOfPage":"https://axia.net.br/blog/ransomware-controles-essenciais/","author":{"@type":"Organization","name":"AXIA","url":"https://axia.net.br/"},"publisher":{"@id":"https://axia.net.br/#organizacao"},"articleSection":"Gestão de segurança"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Ransomware: 10 controles essenciais para proteger sua empresa","description":"Dez controles práticos que reduzem muito o risco e o impacto de um ataque de ransomware, do MFA ao backup imutável e ao plano de resposta.","inLanguage":"pt-BR","image":"https://axia.net.br/assets/img/og.jpg","datePublished":"2026-10-17","dateModified":"2026-11-04","mainEntityOfPage":"https://axia.net.br/blog/ransomware-controles-essenciais/","author":{"@type":"Person","name":"Rogério Gomes","jobTitle":"Fundador da AXIA","url":"https://axia.net.br/sobre/#rogerio-gomes","worksFor":{"@id":"https://axia.net.br/#organizacao"}},"publisher":{"@id":"https://axia.net.br/#organizacao"},"articleSection":"Gestão de segurança"}</script>
 </head>
 <body>
   <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -62,7 +62,7 @@
       <nav class="trilha" aria-label="Você está em"><ol><li><a href="/">Início</a></li><li><a href="/blog/">Blog</a></li><li aria-current="page">Ransomware: 10 controles essenciais para proteger sua empresa</li></ol></nav>
       <span class="tag">Gestão de segurança</span>
       <h1 style="margin-top:12px">Ransomware: 10 controles essenciais para proteger sua empresa</h1>
-      <p class="meta">Publicado em <time datetime="2026-10-17">17 de outubro de 2026</time> · por AXIA</p>
+      <p class="meta">Por <a href="/sobre/#rogerio-gomes">Rogério Gomes</a> · Publicado em <time datetime="2026-10-17">17 de outubro de 2026</time> · Atualizado em <time datetime="2026-11-04">4 de novembro de 2026</time></p>
       <div class="placa capa" aria-hidden="true"><div><small>Gestão de segurança</small><strong>Ransomware</strong></div></div>
       <p>O ransomware sequestra dados e sistemas e cobra resgate para devolvê-los, muitas vezes ameaçando também vazar as informações. Pequenas e médias empresas são alvos frequentes justamente por terem menos defesas. A boa notícia: um conjunto pequeno de controles bloqueia a maior parte dos ataques.</p>
 
@@ -81,10 +81,44 @@
 
 <h2>Por onde começar</h2>
 <p>Se a empresa ainda não tem nada disso, comece por MFA e backups isolados: são os dois controles com maior efeito pelo menor esforço. Em seguida, faça um inventário do que está exposto à internet e corrija o que estiver desatualizado.</p>
+<h2 id="backup-3-2-1">Backup que resiste a um ataque</h2>
+<p>Os grupos de ransomware procuram e apagam os backups antes de criptografar os dados. Por isso, a regra clássica do <strong>3-2-1</strong> ganhou um reforço:</p>
+<ul>
+<li><strong>3</strong> cópias dos dados;</li>
+<li>em <strong>2</strong> tipos de mídia ou serviço diferentes;</li>
+<li><strong>1</strong> delas fora do ambiente principal;</li>
+<li>e pelo menos uma cópia <strong>imutável ou desconectada</strong>, que nem um administrador com a senha roubada consiga apagar.</li>
+</ul>
+<p>Além disso, teste a restauração completa de sistemas críticos de tempos em tempos e anote quanto tempo leva. Um backup que nunca foi restaurado é uma hipótese, não uma garantia.</p>
+
+<h2 id="durante-ataque">O que fazer nas primeiras horas de um ataque</h2>
+<ol>
+<li><strong>Isolar:</strong> desconectar da rede as máquinas afetadas, sem desligá-las, para preservar evidências.</li>
+<li><strong>Acionar o plano:</strong> avisar o responsável por incidentes, a diretoria e, se houver, o seguro cibernético e a empresa de resposta a incidentes.</li>
+<li><strong>Proteger os backups:</strong> confirmar que as cópias estão íntegras e fora do alcance do atacante.</li>
+<li><strong>Trocar credenciais:</strong> principalmente as de administradores, a partir de um equipamento limpo.</li>
+<li><strong>Avaliar dados pessoais:</strong> se houve acesso ou vazamento, preparar a comunicação à ANPD e aos titulares, em até três dias úteis.</li>
+<li><strong>Registrar tudo:</strong> horários, decisões e evidências, para a investigação, a polícia e as autoridades.</li>
+</ol>
+<p>Órgãos de referência, como a agência americana CISA, recomendam não pagar o resgate. Pagar não garante a recuperação dos dados e financia novos ataques. A decisão, quando aparece, deve envolver a diretoria, o jurídico e especialistas.</p>
+
+<h2 id="prioridades">Se der para fazer só três coisas este mês</h2>
+<ol>
+<li>Ativar a autenticação em dois fatores no e-mail, no acesso remoto e nos painéis de administração.</li>
+<li>Garantir uma cópia de backup imutável ou desconectada e testar a restauração de um sistema crítico.</li>
+<li>Atualizar tudo o que fica exposto à internet, como VPN, firewall, servidores de e-mail e sistemas web, e remover o que não é usado.</li>
+</ol>
+
+<h2 id="referencias">Referências</h2>
+<ul class="referencias"><li><a href="https://www.cisa.gov/stopransomware/ransomware-guide" target="_blank" rel="noopener">CISA — #StopRansomware Guide</a></li><li><a href="https://csrc.nist.gov/pubs/ir/8374/final" target="_blank" rel="noopener">NIST IR 8374 — Ransomware Risk Management</a></li><li><a href="https://cartilha.cert.br/" target="_blank" rel="noopener">Cartilha de Segurança para Internet (CERT.br)</a></li><li><a href="https://www.cisecurity.org/controls" target="_blank" rel="noopener">CIS Critical Security Controls</a></li></ul>
 <p class="aviso">Este conteúdo é informativo e não substitui a análise do caso concreto da sua empresa. Normas e exigências regulatórias mudam: confira a versão em vigor antes de decidir.</p>
+      <aside class="autor" aria-label="Sobre o autor">
+        <div class="autor-inicial" aria-hidden="true">RG</div>
+        <div><strong><a href="/sobre/#rogerio-gomes">Rogério Gomes</a></strong> <span>· Fundador da AXIA</span><p>Fundador da AXIA, consultoria em segurança da informação, tecnologia, privacidade e conformidade. Atua como CISO e CTO como serviço, apoiando empresas a estruturar programas de segurança, adequação à LGPD e preparação para ISO 27001 e SOC 2.</p></div>
+      </aside>
       <div class="chamada" style="margin-top:40px;padding:32px">
-        <div><h2 style="font-size:1.4rem">Precisa de ajuda com segurança ou tecnologia?</h2><p>Converse com a AXIA sobre CISO e CTO como serviço, LGPD e conformidade.</p></div>
-        <a class="botao botao-laranja" href="/contato/">Fale conosco</a>
+        <div><h2 style="font-size:1.4rem">Conheça o serviço de CISO como Serviço</h2><p>Um executivo de segurança experiente ao lado da sua equipe, por algumas horas por semana, com responsabilidade sobre o programa de segurança e entregas mensais visíveis.</p></div>
+        <a class="botao botao-laranja" href="/servicos/ciso-como-servico/">Ver o serviço</a>
       </div>
       <section class="leia-tambem" aria-labelledby="leia-tambem">
         <h2 id="leia-tambem" style="margin-top:0">Leia também</h2>
@@ -125,7 +159,7 @@
     <div class="container">
       <div class="colunas">
         <div>
-          <img class="logo-rodape" src="/assets/img/simbolo.png" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
+          <img class="logo-rodape" src="/assets/img/simbolo-300.webp" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
           <p>Consultoria em segurança da informação, tecnologia, privacidade e conformidade. CISO e CTO como serviço para empresas que precisam de liderança experiente sem o custo de um executivo em tempo integral.</p>
         </div>
         <div>

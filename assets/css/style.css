@@ -371,3 +371,26 @@ dialog .acoes { display: flex; gap: 10px; }
 .faixa-admin .icone { width: 46px; height: 46px; border-radius: 12px; display: grid; place-items: center; background: var(--aco-claro); color: var(--aco); flex: none; }
 .faixa-admin > div:nth-child(2) { flex: 1 1 260px; }
 .faixa-admin p { margin: 2px 0 0; color: var(--suave); font-size: .92rem; }
+
+/* Páginas de serviço */
+.servico h3 a { color: inherit; text-decoration: none; }
+.servico h3 a:hover { color: var(--laranja-escuro); }
+.servico .saiba-mais { margin: 14px 0 0; font-size: .92rem; font-weight: 600; }
+.servico .saiba-mais a { color: var(--laranja-escuro); }
+.texto-longo p { font-size: 1.05rem; }
+.caixa-para-quem { background: #fff; border: 1px solid var(--linha); border-left: 4px solid var(--laranja); border-radius: var(--raio); padding: 24px 28px; align-self: start; }
+.caixa-para-quem h2 { font-size: 1.2rem; margin: 0 0 10px; }
+.caixa-para-quem ul { margin: 0; padding-left: 1.1em; display: grid; gap: 8px; color: var(--texto); }
+.outros-servicos { margin-top: 24px; color: var(--suave); font-size: .95rem; }
+.outros-servicos a { color: var(--tinta); }
+
+/* Autor e referências das matérias */
+.autor { display: flex; gap: 16px; align-items: flex-start; margin-top: 40px; padding: 20px 24px; background: #fff; border: 1px solid var(--linha); border-radius: var(--raio); }
+.autor-inicial { flex: none; width: 52px; height: 52px; border-radius: 50%; display: grid; place-items: center; background: var(--tinta); color: #fff; font-family: var(--titulo); font-weight: 600; letter-spacing: .04em; }
+.autor p { margin: 6px 0 0; color: var(--texto); font-size: .95rem; }
+.autor span { color: var(--suave); font-size: .92rem; }
+.autor-grande { margin-top: 12px; }
+.autor-grande .autor-inicial { width: 72px; height: 72px; font-size: 1.3rem; }
+.referencias { font-size: .95rem; }
+.referencias a { overflow-wrap: anywhere; }
+.servico-intro { align-items: start; }
