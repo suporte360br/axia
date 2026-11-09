@@ -753,6 +753,8 @@ function redirecionar(destino) {
 paginas['privacy/index.html'] = redirecionar('/privacidade/');
 paginas['legal-notice/index.html'] = redirecionar('/privacidade/');
 paginas['blog-single-page-layout/index.html'] = redirecionar('/blog/');
+// Posts do blog do site antigo (o Search Console mostrou blog-post-1 e blog-post-3 dando 404)
+for (let n = 1; n <= 10; n++) paginas[`blog-single-page-layout/blog-post-${n}/index.html`] = redirecionar('/blog/');
 
 // ---------- Gravação ----------
 for (const [arq, html] of Object.entries(paginas)) {
