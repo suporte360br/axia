@@ -1,221 +1,345 @@
-// Conteúdo do site AXIA: matérias do blog.
+// Conteúdo do site AXIA: matérias do blog (foco em recrutamento, alocação e squads).
 // Depois de editar, rode: node gerador/gerar.js
 // Os cartões e capas usam a placa gráfica da marca (sem foto).
+// Campos: slug, titulo, tema, data, descricao, corpo (HTML), servico (slug em servicos.js para a chamada no fim),
+// referencias [[nome, url]] (opcional) e atualizado (opcional, data da última revisão).
 
-const AVISO = `<p class="aviso">Este conteúdo é informativo e não substitui a análise do caso concreto da sua empresa. Normas e exigências regulatórias mudam: confira a versão em vigor antes de decidir.</p>`;
+const AVISO = `<p class="aviso">Este conteúdo é informativo e não substitui a orientação jurídica ou trabalhista para o caso concreto da sua empresa.</p>`;
 
 exports.materias = [
   {
-    slug: 'o-que-e-ciso-como-servico',
-    titulo: 'CISO como Serviço: o que é e quando faz sentido',
-    tema: 'Gestão de segurança',
-    data: '2026-10-21',
-    descricao: 'Entenda o que faz um CISO como serviço, quanto da semana ele dedica à empresa e em que momento esse modelo compensa mais do que contratar um executivo.',
+    slug: 'como-contratar-profissionais-de-seguranca-da-informacao',
+    titulo: 'Como contratar profissionais de segurança da informação',
+    tema: 'Recrutamento',
+    data: '2026-11-18',
+    servico: 'recrutamento-e-selecao',
+    descricao: 'Perfis, certificações e formas de avaliar candidatos em segurança da informação: um guia para não errar na contratação de analistas, especialistas e líderes.',
+    referencias: [
+      ['NICE Framework (NIST): papéis e competências em cibersegurança', 'https://niccs.cisa.gov/workforce-development/nice-framework'],
+      ['ISC2: certificações em segurança da informação', 'https://www.isc2.org/certifications'],
+    ],
     corpo: `
-<p>O CISO (<em>Chief Information Security Officer</em>) é o executivo responsável pelo programa de segurança da informação. Em empresas grandes, é um cargo em tempo integral com equipe própria. Na maioria das pequenas e médias empresas, porém, ninguém ocupa esse papel: a segurança fica dividida entre o time de TI, um fornecedor e boa vontade.</p>
-<p>O <strong>CISO como Serviço</strong> (ou <em>vCISO</em>, CISO virtual) resolve esse vazio: um profissional experiente assume a liderança da segurança por algumas horas por semana ou por mês, com metas e entregas definidas.</p>
+<p>Contratar em segurança da informação é difícil por dois motivos. O primeiro é a escassez: há mais vagas do que profissionais experientes. O segundo é que "segurança" reúne funções muito diferentes, e um currículo cheio de siglas não garante que a pessoa saiba fazer o que a sua empresa precisa.</p>
 
 <nav class="sumario" aria-label="Nesta matéria"><strong>Nesta matéria</strong><ol>
-<li><a href="#o-que-faz">O que um CISO como serviço faz</a></li>
-<li><a href="#quando">Sinais de que a empresa precisa</a></li>
-<li><a href="#comparacao">Comparação com outras opções</a></li>
-<li><a href="#como-escolher">Como escolher</a></li>
+<li><a href="#perfis">Os principais perfis</a></li>
+<li><a href="#certificacoes">O peso das certificações</a></li>
+<li><a href="#avaliar">Como avaliar na prática</a></li>
+<li><a href="#erros">Erros comuns</a></li>
 </ol></nav>
 
-<h2 id="o-que-faz">O que um CISO como serviço faz</h2>
-<ul>
-<li><strong>Diagnóstico e plano:</strong> avalia a maturidade atual, identifica os maiores riscos e monta um plano priorizado, normalmente de 12 meses.</li>
-<li><strong>Governança:</strong> escreve ou revisa políticas, define responsabilidades e cria indicadores para a diretoria.</li>
-<li><strong>Relação com clientes e auditores:</strong> responde questionários de segurança, participa de auditorias e conduz projetos de certificação, como ISO 27001 ou SOC 2.</li>
-<li><strong>Gestão de fornecedores:</strong> avalia riscos de terceiros e ajuda a escolher ferramentas sem desperdício.</li>
-<li><strong>Incidentes:</strong> prepara o plano de resposta e coordena a reação quando algo acontece.</li>
-</ul>
-
-<h2 id="quando">Sinais de que a empresa precisa</h2>
-<ul>
-<li>Clientes grandes começaram a mandar questionários de segurança e ninguém sabe responder.</li>
-<li>Um investidor ou parceiro pediu evidências de segurança ou adequação à LGPD.</li>
-<li>A empresa sofreu um incidente (ou passou perto) e percebeu que não tinha plano.</li>
-<li>O time de TI está sobrecarregado e a segurança fica sempre para depois.</li>
-<li>Há gastos com ferramentas de segurança, mas sem clareza do que elas protegem.</li>
-</ul>
-
-<h2 id="comparacao">Comparação com outras opções</h2>
+<h2 id="perfis">Os principais perfis</h2>
+<p>Antes de abrir a vaga, defina qual problema a pessoa vai resolver. Os perfis mais comuns são:</p>
 <div class="rolagem"><table class="tabela">
-<thead><tr><th>Opção</th><th>Vantagens</th><th>Limites</th></tr></thead>
+<thead><tr><th>Perfil</th><th>O que faz no dia a dia</th></tr></thead>
 <tbody>
-<tr><td>CISO em tempo integral</td><td>Dedicação total, presença diária</td><td>Custo alto e difícil de contratar; costuma compensar só em empresas maiores ou reguladas</td></tr>
-<tr><td>CISO como serviço</td><td>Experiência sênior por uma fração do custo; escopo ajustável</td><td>Precisa de um ponto focal interno para executar o dia a dia</td></tr>
-<tr><td>Só fornecedores de ferramentas</td><td>Tecnologia pronta</td><td>Sem estratégia nem governança; risco de comprar o que não precisa</td></tr>
+<tr><td>Analista de SOC</td><td>Monitora alertas, investiga eventos suspeitos e trata incidentes, normalmente com ferramentas de SIEM.</td></tr>
+<tr><td>Especialista em GRC</td><td>Cuida de políticas, análise de riscos, auditorias e frameworks como ISO 27001.</td></tr>
+<tr><td>Especialista em IAM</td><td>Gerencia identidades e acessos: contas, perfis, autenticação forte e revisões de acesso.</td></tr>
+<tr><td>Analista de vulnerabilidades / pentester</td><td>Encontra falhas em sistemas e aplicações e acompanha a correção.</td></tr>
+<tr><td>Engenheiro de segurança</td><td>Implanta e mantém controles técnicos, como firewalls, EDR e segurança em nuvem.</td></tr>
+<tr><td>Gestor de segurança / CISO</td><td>Lidera o programa de segurança, define prioridades e responde à diretoria.</td></tr>
 </tbody></table></div>
+<p>Uma vaga que pede tudo isso em uma pessoa só costuma ficar aberta por meses. Se a empresa precisa de várias dessas competências, vale considerar um time ou um squad.</p>
 
-<h2 id="como-escolher">Como escolher</h2>
-<p>Peça um plano com entregas mensais visíveis, pergunte como o profissional reporta à diretoria e verifique a experiência com o tipo de exigência que a sua empresa enfrenta (clientes corporativos, setor financeiro, saúde, LGPD). Desconfie de quem começa vendendo ferramenta antes de entender o negócio.</p>
-${AVISO}`
-  },
-  {
-    slug: 'lgpd-checklist-para-pequenas-e-medias-empresas',
-    titulo: 'LGPD na prática: checklist para pequenas e médias empresas',
-    tema: 'Privacidade e LGPD',
-    data: '2026-10-21',
-    descricao: 'Os passos essenciais para adequar uma pequena ou média empresa à LGPD sem burocracia: mapeamento, bases legais, avisos, contratos, segurança e incidentes.',
-    corpo: `
-<p>A Lei Geral de Proteção de Dados (Lei 13.709/2018) vale para empresas de todos os tamanhos. Para agentes de pequeno porte, a ANPD simplificou algumas obrigações, mas o núcleo continua o mesmo: saber quais dados pessoais a empresa trata, por quê, e protegê-los.</p>
-<p>Este checklist resume o que costuma ter mais impacto, na ordem em que recomendamos atacar.</p>
-
-<nav class="sumario" aria-label="Nesta matéria"><strong>Nesta matéria</strong><ol>
-<li><a href="#mapear">Mapear os dados</a></li>
-<li><a href="#bases">Definir bases legais</a></li>
-<li><a href="#transparencia">Transparência e direitos</a></li>
-<li><a href="#terceiros">Contratos com terceiros</a></li>
-<li><a href="#seguranca">Segurança e incidentes</a></li>
-</ol></nav>
-
-<h2 id="mapear">1. Mapear os dados</h2>
-<p>Liste os processos que usam dados pessoais (vendas, RH, atendimento, marketing, financeiro) e, para cada um, registre: quais dados, de quem, para quê, onde ficam, quem acessa e por quanto tempo são guardados. Uma planilha bem feita já resolve na maioria das PMEs.</p>
-
-<h2 id="bases">2. Definir as bases legais</h2>
-<p>Cada tratamento precisa de uma base legal: execução de contrato, obrigação legal, legítimo interesse, consentimento, entre outras. Consentimento não é a resposta para tudo; muitas vezes ele é a base mais frágil, porque pode ser revogado a qualquer momento.</p>
-
-<h2 id="transparencia">3. Transparência e direitos dos titulares</h2>
+<h2 id="certificacoes">O peso das certificações</h2>
+<p>Certificações mostram que a pessoa estudou um conjunto de conhecimentos e passou numa prova. Algumas, como a CISSP, também exigem anos de experiência comprovada. Elas ajudam a filtrar, mas não substituem a avaliação prática:</p>
 <ul>
-<li>Publique um aviso de privacidade claro no site, em linguagem simples.</li>
-<li>Crie um canal para o titular pedir acesso, correção ou exclusão (um e-mail dedicado já atende).</li>
-<li>Indique o encarregado (DPO) ou o canal de comunicação, conforme o porte da empresa.</li>
+<li><strong>De entrada:</strong> CompTIA Security+ e certificações introdutórias de fornecedores.</li>
+<li><strong>Técnicas:</strong> certificações de nuvem, de ferramentas específicas e de testes de invasão.</li>
+<li><strong>De gestão e governança:</strong> CISSP, CISM e auditor líder ISO 27001.</li>
 </ul>
+<p>Na descrição da vaga, separe as certificações <strong>obrigatórias</strong> (raramente necessárias) das <strong>desejáveis</strong>. Exigir certificação demais afasta bons profissionais que aprenderam na prática.</p>
 
-<h2 id="terceiros">4. Contratos com fornecedores</h2>
-<p>Sistemas na nuvem, contabilidade, agência de marketing e folha de pagamento recebem dados pessoais da empresa. Os contratos devem prever confidencialidade, segurança, uso restrito à finalidade e aviso em caso de incidente.</p>
-
-<h2 id="seguranca">5. Segurança e resposta a incidentes</h2>
-<ul>
-<li>Autenticação em dois fatores no e-mail e nos sistemas principais.</li>
-<li>Acesso por função: cada pessoa vê apenas o que precisa.</li>
-<li>Backups testados e cópia fora do ambiente principal.</li>
-<li>Um roteiro simples de resposta a incidentes, incluindo a avaliação sobre comunicar a ANPD e os titulares quando houver risco relevante.</li>
-</ul>
-
-<p>Adequação à LGPD não é um projeto com data para acabar: é uma rotina. Revise o mapeamento sempre que um processo ou sistema novo entrar na empresa.</p>
-${AVISO}`
-  },
-  {
-    slug: 'iso-27001-ou-soc-2',
-    titulo: 'ISO 27001 ou SOC 2: qual a sua empresa precisa?',
-    tema: 'Conformidade',
-    data: '2026-10-20',
-    descricao: 'As diferenças entre a certificação ISO/IEC 27001 e o relatório SOC 2, quem pede cada um e como decidir por onde começar.',
-    corpo: `
-<p>Quando uma empresa começa a vender para clientes maiores, cedo ou tarde aparece a pergunta: <em>“vocês têm ISO 27001 ou SOC 2?”</em>. Os dois provam que a empresa leva segurança a sério, mas funcionam de jeitos diferentes.</p>
-
-<h2>ISO/IEC 27001</h2>
-<p>É uma norma internacional que define um <strong>Sistema de Gestão de Segurança da Informação (SGSI)</strong>. A empresa define o escopo, avalia riscos, escolhe controles (o Anexo A traz uma lista de referência) e demonstra que o sistema funciona e melhora continuamente. Um organismo certificador acreditado faz a auditoria e emite um certificado válido por três anos, com auditorias de manutenção anuais.</p>
-
-<h2>SOC 2</h2>
-<p>É um relatório de auditoria baseado nos critérios de serviços de confiança do AICPA (segurança, disponibilidade, integridade de processamento, confidencialidade e privacidade). Não é um certificado: é a opinião de um auditor independente sobre os controles da empresa. O <strong>Tipo I</strong> avalia o desenho dos controles em uma data; o <strong>Tipo II</strong> avalia se funcionaram ao longo de um período, normalmente de 3 a 12 meses.</p>
-
-<h2>Comparação rápida</h2>
-<div class="rolagem"><table class="tabela">
-<thead><tr><th></th><th>ISO 27001</th><th>SOC 2</th></tr></thead>
-<tbody>
-<tr><td>Formato</td><td>Certificado público</td><td>Relatório confidencial, compartilhado sob acordo de sigilo</td></tr>
-<tr><td>Mais pedido por</td><td>Clientes na Europa, América Latina e setor público</td><td>Clientes nos Estados Unidos e empresas de tecnologia (SaaS)</td></tr>
-<tr><td>Foco</td><td>Sistema de gestão e riscos</td><td>Operação efetiva dos controles no período</td></tr>
-<tr><td>Validade</td><td>3 anos, com auditorias anuais</td><td>Relatório renovado a cada ciclo, normalmente anual</td></tr>
-</tbody></table></div>
-
-<h2>Como decidir</h2>
-<ul>
-<li><strong>Olhe para os clientes:</strong> qual dos dois eles pedem nos contratos e questionários?</li>
-<li><strong>Olhe para o mercado-alvo:</strong> empresas que vendem para os Estados Unidos tendem ao SOC 2; no Brasil e na Europa, a ISO 27001 é mais reconhecida.</li>
-<li><strong>Aproveite a sobreposição:</strong> boa parte dos controles é comum. Quem estrutura bem um, chega ao outro com muito menos esforço.</li>
-</ul>
-<p>Em qualquer caso, o caminho começa igual: definir escopo, mapear riscos, documentar políticas e gerar evidências de que os controles funcionam no dia a dia.</p>
-${AVISO}`
-  },
-  {
-    slug: 'plano-de-continuidade-de-negocios',
-    titulo: 'Plano de continuidade de negócios: como montar o seu',
-    tema: 'Continuidade',
-    data: '2026-10-19',
-    descricao: 'Passo a passo para criar um plano de continuidade de negócios: análise de impacto, estratégias de recuperação, papéis, comunicação e testes.',
-    corpo: `
-<p>Um ataque de ransomware, uma queda do provedor de nuvem, um incêndio ou a saída repentina de uma pessoa-chave: qualquer um desses eventos pode parar a operação. O <strong>plano de continuidade de negócios (PCN)</strong> define como a empresa continua funcionando, mesmo em modo reduzido, até tudo voltar ao normal.</p>
-
-<h2>1. Análise de impacto no negócio (BIA)</h2>
-<p>Liste os processos críticos e responda para cada um: quanto tempo a empresa aguenta sem ele (o <strong>RTO</strong>, tempo objetivo de recuperação) e quanto de dado pode perder (o <strong>RPO</strong>, ponto objetivo de recuperação). Faturamento e atendimento ao cliente costumam tolerar horas; uma rotina interna pode tolerar dias.</p>
-
-<h2>2. Estratégias de recuperação</h2>
-<ul>
-<li><strong>Dados:</strong> backups automáticos, com cópia isolada (offline ou imutável) e restauração testada.</li>
-<li><strong>Sistemas:</strong> ambientes alternativos ou procedimentos manuais temporários.</li>
-<li><strong>Pessoas:</strong> substitutos definidos e conhecimento documentado.</li>
-<li><strong>Fornecedores:</strong> alternativas para os serviços dos quais a operação depende.</li>
-</ul>
-
-<h2>3. Papéis e acionamento</h2>
-<p>Defina quem declara a crise, quem coordena e quem executa cada tarefa. Deixe os contatos fora dos sistemas que podem cair: uma cópia impressa ou em um canal alternativo evita a situação clássica de o plano estar num servidor que foi criptografado.</p>
-
-<h2>4. Comunicação</h2>
-<p>Prepare modelos de mensagem para colaboradores, clientes, fornecedores e, se for o caso, autoridades. Em incidentes com dados pessoais, lembre-se da avaliação de comunicação à ANPD prevista na LGPD.</p>
-
-<h2>5. Testes</h2>
-<p>Plano que nunca foi testado é só uma intenção. Faça ao menos um <strong>exercício de mesa</strong> por ano, simulando um cenário realista, e teste a restauração de backups com regularidade. Cada teste revela ajustes que tornam o plano mais confiável.</p>
-${AVISO}`
-  },
-  {
-    slug: 'cto-como-servico',
-    titulo: 'CTO como Serviço: liderança técnica sob demanda',
-    tema: 'Tecnologia',
-    data: '2026-10-18',
-    descricao: 'O que faz um CTO como serviço, quando contratar esse modelo e como ele ajuda empresas e startups a tomar boas decisões de tecnologia.',
-    corpo: `
-<p>Muitas empresas dependem de tecnologia, mas não têm alguém com visão técnica e de negócio para decidir arquitetura, contratar fornecedores e organizar o time. O <strong>CTO como Serviço</strong> traz essa liderança em regime parcial, pelo tempo necessário.</p>
-
-<h2>Quando faz sentido</h2>
-<ul>
-<li><strong>Startups em fase inicial</strong> que ainda não têm um CTO sócio ou precisam de apoio para estruturar o produto.</li>
-<li><strong>Empresas tradicionais</strong> em transformação digital, que terceirizam o desenvolvimento e precisam de alguém do seu lado da mesa.</li>
-<li><strong>Momentos de transição</strong>, como a saída de um líder técnico, uma migração para a nuvem ou a escolha de um sistema de gestão.</li>
-<li><strong>Preparação para investimento</strong>, quando a diligência técnica vai avaliar código, arquitetura e segurança.</li>
-</ul>
-
-<h2>O que entrega</h2>
-<ul>
-<li>Roadmap técnico alinhado às metas do negócio.</li>
-<li>Decisões de arquitetura, nuvem e custos, documentadas.</li>
-<li>Seleção e gestão de fornecedores e fábricas de software.</li>
-<li>Processos de desenvolvimento com segurança desde o início.</li>
-<li>Contratação e mentoria de quem vai liderar o time no futuro.</li>
-</ul>
-
-<h2>Segurança desde a arquitetura</h2>
-<p>Corrigir uma falha de segurança depois que o sistema está em produção custa muito mais do que evitá-la no desenho. Por isso, na AXIA, o trabalho de CTO e de CISO caminha junto: controle de acesso, criptografia, registros de auditoria e backups entram no projeto desde a primeira versão.</p>
-${AVISO}`
-  },
-  {
-    slug: 'ransomware-controles-essenciais',
-    titulo: 'Ransomware: 10 controles essenciais para proteger sua empresa',
-    tema: 'Gestão de segurança',
-    data: '2026-10-17',
-    descricao: 'Dez controles práticos que reduzem muito o risco e o impacto de um ataque de ransomware, do MFA ao backup imutável e ao plano de resposta.',
-    corpo: `
-<p>O ransomware sequestra dados e sistemas e cobra resgate para devolvê-los, muitas vezes ameaçando também vazar as informações. Pequenas e médias empresas são alvos frequentes justamente por terem menos defesas. A boa notícia: um conjunto pequeno de controles bloqueia a maior parte dos ataques.</p>
-
+<h2 id="avaliar">Como avaliar na prática</h2>
 <ol>
-<li><strong>Autenticação em dois fatores (MFA)</strong> em e-mail, acesso remoto, VPN e painéis de administração da nuvem.</li>
-<li><strong>Backups 3-2-1</strong>: três cópias, em dois tipos de mídia, uma fora do ambiente principal e protegida contra alteração (imutável ou offline).</li>
-<li><strong>Teste de restauração</strong> periódico. Backup que nunca foi restaurado é uma aposta.</li>
-<li><strong>Atualizações em dia</strong>, com prioridade para sistemas expostos à internet, como VPN, firewall e servidores de e-mail.</li>
-<li><strong>Menor privilégio</strong>: ninguém usa conta de administrador no dia a dia; acessos revistos periodicamente.</li>
-<li><strong>Proteção de estações</strong> com antivírus moderno (EDR) e monitoramento de alertas.</li>
-<li><strong>Acesso remoto seguro</strong>: nada de área de trabalho remota (RDP) aberta direto para a internet.</li>
-<li><strong>Filtro de e-mail</strong> e treinamento contínuo contra phishing, a porta de entrada mais comum.</li>
-<li><strong>Segmentação de rede</strong> para que uma máquina comprometida não alcance tudo.</li>
-<li><strong>Plano de resposta</strong> escrito e ensaiado: quem isola o quê, quem comunica quem e como restaurar.</li>
+<li><strong>Entrevista técnica com quem entende do assunto:</strong> perguntas sobre situações reais. Por exemplo: "como você investigaria um login suspeito de madrugada?"</li>
+<li><strong>Estudo de caso curto:</strong> um cenário simples, como um alerta, uma política ou uma análise de risco, discutido em conjunto. Prefira casos de até uma hora, sem trabalho gratuito extenso.</li>
+<li><strong>Validação de experiência:</strong> conversa sobre projetos anteriores, com detalhes do que a pessoa fez e do que o time fez.</li>
+<li><strong>Avaliação comportamental:</strong> segurança exige comunicação com áreas de negócio, calma em incidentes e ética no trato de informações sensíveis.</li>
+<li><strong>Referências:</strong> sempre com autorização do candidato.</li>
 </ol>
 
-<h2>Por onde começar</h2>
-<p>Se a empresa ainda não tem nada disso, comece por MFA e backups isolados: são os dois controles com maior efeito pelo menor esforço. Em seguida, faça um inventário do que está exposto à internet e corrija o que estiver desatualizado.</p>
+<h2 id="erros">Erros comuns</h2>
+<ul>
+<li>Copiar a descrição de vaga de outra empresa, sem adaptar à realidade da sua.</li>
+<li>Pedir dez anos de experiência para uma vaga de analista pleno.</li>
+<li>Não informar a faixa salarial, o que atrai candidatos desalinhados.</li>
+<li>Deixar a entrevista técnica só com o RH, sem apoio de alguém da área.</li>
+<li>Demorar semanas entre as etapas: bons profissionais recebem outras propostas nesse meio-tempo.</li>
+</ul>
+${AVISO}`
+  },
+  {
+    slug: 'descritivo-de-vaga-de-ti',
+    titulo: 'Descritivo de vaga de TI: o que não pode faltar',
+    tema: 'Recrutamento',
+    data: '2026-11-18',
+    servico: 'recrutamento-e-selecao',
+    descricao: 'Um bom descritivo atrai os candidatos certos e afasta os desalinhados. Veja o que incluir em uma vaga de tecnologia: hard skills, soft skills, modelo de trabalho e salário.',
+    corpo: `
+<p>O descritivo da vaga é o primeiro filtro do processo seletivo. Quando ele é vago, chegam centenas de currículos desalinhados. Quando pede requisitos irreais, ninguém se candidata. Um descritivo claro economiza semanas de triagem e entrevistas.</p>
+
+<nav class="sumario" aria-label="Nesta matéria"><strong>Nesta matéria</strong><ol>
+<li><a href="#estrutura">A estrutura de um bom descritivo</a></li>
+<li><a href="#hard-soft">Hard skills e soft skills</a></li>
+<li><a href="#salario">Salário e modelo de trabalho</a></li>
+<li><a href="#cuidados">Cuidados legais e de linguagem</a></li>
+</ol></nav>
+
+<h2 id="estrutura">A estrutura de um bom descritivo</h2>
+<p>O padrão que a AXIA usa no <a href="/recrutamento/anunciar-vaga/">portal de vagas</a> organiza o descritivo em blocos:</p>
+<ol>
+<li><strong>Identificação:</strong> título do cargo sem gênero, área, nível e quantidade de vagas.</li>
+<li><strong>Tipo de trabalho:</strong> forma de contratação, modelo (presencial, híbrido ou remoto), local, jornada e viagens.</li>
+<li><strong>Remuneração e benefícios:</strong> faixa salarial e benefícios.</li>
+<li><strong>Missão e responsabilidades:</strong> para que o cargo existe e o que a pessoa vai fazer, em pelo menos três itens concretos.</li>
+<li><strong>Requisitos:</strong> hard skills com o nível exigido, soft skills, experiência, formação, certificações e idiomas.</li>
+<li><strong>Conhecimentos desejáveis:</strong> o que conta pontos, mas não elimina.</li>
+<li><strong>Processo seletivo:</strong> etapas e prazo.</li>
+</ol>
+
+<h2 id="hard-soft">Hard skills e soft skills</h2>
+<p><strong>Hard skills</strong> são conhecimentos técnicos: linguagens, ferramentas, normas, métodos. Para cada uma, informe o nível exigido (básico, intermediário, avançado) e se é obrigatória ou desejável. Exemplo: "SIEM (Splunk ou QRadar), nível avançado, obrigatório".</p>
+<p><strong>Soft skills</strong> são competências comportamentais. Evite a lista genérica ("proativo, dinâmico, comunicativo") e escolha de duas a seis que realmente fazem diferença no cargo. Para uma posição de resposta a incidentes, por exemplo, "calma sob pressão" e "comunicação clara" importam mais do que "criatividade".</p>
+<p>Uma regra útil: se a lista de requisitos obrigatórios tem mais de oito itens, provavelmente há desejáveis disfarçados de obrigatórios.</p>
+
+<h2 id="salario">Salário e modelo de trabalho</h2>
+<p>Informar a faixa salarial aumenta a qualidade das candidaturas, porque quem está fora da faixa não se candidata. Se a empresa preferir não publicar, ao menos tenha a faixa definida antes de começar e informe na primeira conversa.</p>
+<p>O modelo de trabalho também é decisivo em tecnologia. Seja específico: "híbrido, 2 dias por semana no escritório da Avenida Paulista" é muito melhor do que só "híbrido".</p>
+
+<h2 id="cuidados">Cuidados legais e de linguagem</h2>
+<ul>
+<li>Não use requisitos discriminatórios, como idade, gênero, estado civil, aparência ou "boa aparência".</li>
+<li>Use títulos neutros: "Pessoa Desenvolvedora" ou "Analista (todos os gêneros)".</li>
+<li>Vagas afirmativas, como as exclusivas para pessoas com deficiência ou para mulheres em tecnologia, são permitidas e bem-vindas, desde que identificadas como tal.</li>
+<li>Cuidado com os dados pessoais dos candidatos: veja a matéria sobre <a href="/blog/lgpd-no-recrutamento-dados-de-candidatos/">LGPD no recrutamento</a>.</li>
+</ul>
+${AVISO}`
+  },
+  {
+    slug: 'alocacao-de-profissionais-ou-contratacao-direta',
+    titulo: 'Alocação de profissionais ou contratação direta: como escolher',
+    tema: 'Alocação',
+    data: '2026-11-18',
+    servico: 'alocacao-de-profissionais',
+    descricao: 'Quando vale contratar diretamente e quando faz mais sentido alocar profissionais de um parceiro. Compare prazos, custos, flexibilidade e responsabilidades.',
+    referencias: [
+      ['Lei nº 6.019/1974, com as alterações da Lei nº 13.429/2017 (Planalto)', 'https://www.planalto.gov.br/ccivil_03/leis/l6019.htm'],
+    ],
+    corpo: `
+<p>Toda empresa que precisa de um profissional de tecnologia enfrenta a mesma pergunta: contratar diretamente ou contar com um profissional alocado por um parceiro? A resposta depende de quanto tempo a necessidade vai durar, da urgência e do quanto a função é central para o negócio.</p>
+
+<nav class="sumario" aria-label="Nesta matéria"><strong>Nesta matéria</strong><ol>
+<li><a href="#comparacao">Comparação lado a lado</a></li>
+<li><a href="#quando-alocar">Quando a alocação faz mais sentido</a></li>
+<li><a href="#quando-contratar">Quando contratar diretamente</a></li>
+<li><a href="#cuidados">Cuidados no contrato</a></li>
+</ol></nav>
+
+<h2 id="comparacao">Comparação lado a lado</h2>
+<div class="rolagem"><table class="tabela">
+<thead><tr><th>Critério</th><th>Contratação direta</th><th>Alocação</th></tr></thead>
+<tbody>
+<tr><td>Tempo até começar</td><td>Depende do processo seletivo interno</td><td>Costuma ser menor, porque o parceiro já tem processo e base de talentos</td></tr>
+<tr><td>Duração</td><td>Indeterminada</td><td>Pelo período, projeto ou horas combinados</td></tr>
+<tr><td>Flexibilidade</td><td>Ajustar o time exige novas contratações ou desligamentos</td><td>Equipe pode ser ampliada, reduzida ou substituída conforme o contrato</td></tr>
+<tr><td>Vínculo e encargos</td><td>Da empresa</td><td>Do parceiro, que responde pelo vínculo com o profissional</td></tr>
+<tr><td>Conhecimento</td><td>Fica na empresa</td><td>Exige plano de documentação e transição</td></tr>
+</tbody></table></div>
+
+<h2 id="quando-alocar">Quando a alocação faz mais sentido</h2>
+<ul>
+<li><strong>Projetos com início e fim:</strong> uma migração para a nuvem, a implantação de um sistema, um projeto de adequação.</li>
+<li><strong>Demandas sazonais ou picos:</strong> períodos em que a equipe interna não dá conta.</li>
+<li><strong>Especialidades raras:</strong> quando a empresa precisa de um conhecimento específico por alguns meses, sem justificar uma vaga fixa.</li>
+<li><strong>Cobertura de ausências:</strong> licenças, saídas inesperadas ou transição entre profissionais.</li>
+<li><strong>Lideranças por período:</strong> um CISO, CTO ou gerente de projetos para estruturar uma área antes da contratação definitiva.</li>
+</ul>
+
+<h2 id="quando-contratar">Quando contratar diretamente</h2>
+<ul>
+<li>A função é permanente e central para o negócio.</li>
+<li>O conhecimento acumulado pela pessoa é estratégico e precisa ficar na empresa.</li>
+<li>A empresa quer formar uma carreira interna para aquela posição.</li>
+</ul>
+<p>Mesmo nesses casos, um parceiro de recrutamento pode encurtar o processo seletivo e aumentar a precisão da escolha. Muitas empresas combinam os dois modelos: alocam enquanto recrutam a posição definitiva.</p>
+
+<h2 id="cuidados">Cuidados no contrato</h2>
+<p>A terceirização de serviços, inclusive da atividade principal da empresa, é permitida no Brasil desde as mudanças trazidas pela Lei 13.429/2017, que alterou a Lei 6.019/1974. Ainda assim, alguns cuidados são essenciais:</p>
+<ul>
+<li>Deixe claro em contrato o escopo, os níveis de serviço e quem cuida de equipamentos, acessos e confidencialidade.</li>
+<li>Prefira parceiros que respondam efetivamente pelo vínculo, pelos encargos e pelo acompanhamento dos profissionais.</li>
+<li>Combine regras de substituição, ampliação e redução da equipe.</li>
+<li>Peça orientação jurídica para estruturar o contrato no seu caso, especialmente quanto à forma de gestão do dia a dia dos profissionais.</li>
+</ul>
+${AVISO}`
+  },
+  {
+    slug: 'squad-dedicado-como-montar',
+    titulo: 'Squad dedicado: o que é e como montar uma equipe que entrega',
+    tema: 'Squads',
+    data: '2026-11-18',
+    servico: 'squads-especializados',
+    descricao: 'O que é um squad, quais perfis compõem uma equipe de tecnologia, segurança ou dados e como garantir governança e resultados com um squad dedicado.',
+    corpo: `
+<p>"Squad" virou palavra comum em tecnologia, mas nem toda equipe com esse nome funciona como um squad de verdade. Um squad é uma equipe pequena, multidisciplinar e estável, com os perfis necessários para entregar um objetivo de ponta a ponta, sem depender de várias áreas separadas.</p>
+
+<nav class="sumario" aria-label="Nesta matéria"><strong>Nesta matéria</strong><ol>
+<li><a href="#composicao">Exemplos de composição</a></li>
+<li><a href="#modelos">Modelos de squad</a></li>
+<li><a href="#montar">Como montar, passo a passo</a></li>
+<li><a href="#indicadores">Indicadores que importam</a></li>
+</ol></nav>
+
+<h2 id="composicao">Exemplos de composição</h2>
+<p>A composição depende do objetivo. Alguns exemplos típicos:</p>
+<ul>
+<li><strong>Produto digital:</strong> um líder técnico, de dois a quatro desenvolvedores, um QA e um Product Owner, com apoio de DevOps.</li>
+<li><strong>Segurança da informação:</strong> analistas de SOC, um especialista em vulnerabilidades, um especialista em IAM e um coordenador.</li>
+<li><strong>Dados:</strong> engenheiros de dados, um analista de BI e, conforme o caso, um cientista de dados.</li>
+<li><strong>Projetos e transformação:</strong> gerente de projetos, analistas de negócios e especialistas em processos.</li>
+</ul>
+<p>Squads funcionam melhor com até oito ou nove pessoas. Acima disso, a comunicação fica mais lenta e vale dividir em dois.</p>
+
+<h2 id="modelos">Modelos de squad</h2>
+<div class="rolagem"><table class="tabela">
+<thead><tr><th>Modelo</th><th>Quando usar</th></tr></thead>
+<tbody>
+<tr><td>Squad gerenciado</td><td>A empresa quer contratar a entrega, e não gerenciar a equipe.</td></tr>
+<tr><td>Squad dedicado</td><td>Há demanda contínua e a empresa quer uma equipe exclusiva.</td></tr>
+<tr><td>Squad híbrido</td><td>A equipe interna existe, mas precisa de reforço de especialidades.</td></tr>
+<tr><td>Squad por projeto</td><td>Há um objetivo com prazo e escopo definidos.</td></tr>
+<tr><td>Squad sob demanda</td><td>O volume de trabalho varia e a equipe precisa acompanhar.</td></tr>
+</tbody></table></div>
+
+<h2 id="montar">Como montar, passo a passo</h2>
+<ol>
+<li><strong>Defina o objetivo:</strong> o que o squad precisa entregar e em quanto tempo.</li>
+<li><strong>Desenhe a composição:</strong> perfis, senioridade e quantidade, começando enxuto.</li>
+<li><strong>Escolha o modelo:</strong> quem gerencia, quem prioriza e como a equipe se integra ao time interno.</li>
+<li><strong>Faça o onboarding:</strong> acessos, ferramentas, documentação, rituais e canais de comunicação.</li>
+<li><strong>Estabeleça a governança:</strong> quem define prioridades, como as entregas são aceitas e com que frequência há reporte.</li>
+<li><strong>Acompanhe e ajuste:</strong> revise a composição quando as prioridades mudarem.</li>
+</ol>
+
+<h2 id="indicadores">Indicadores que importam</h2>
+<ul>
+<li><strong>Entregas concluídas</strong> em relação ao planejado no período.</li>
+<li><strong>Prazo:</strong> tempo entre o início de uma demanda e a entrega.</li>
+<li><strong>Qualidade:</strong> defeitos ou retrabalho após a entrega.</li>
+<li><strong>Satisfação do cliente interno</strong> com o resultado.</li>
+<li><strong>Estabilidade da equipe:</strong> trocas frequentes de pessoas costumam derrubar a produtividade.</li>
+</ul>
+${AVISO}`
+  },
+  {
+    slug: 'como-contratar-ciso-ou-cto',
+    titulo: 'Como contratar um CISO ou CTO: recrutamento executivo em tecnologia',
+    tema: 'Recrutamento executivo',
+    data: '2026-11-18',
+    servico: 'recrutamento-e-selecao',
+    descricao: 'O que avaliar ao contratar um CISO ou CTO, quando faz sentido um executivo sob demanda e como conduzir um processo seletivo confidencial.',
+    corpo: `
+<p>Contratar um CISO (diretor de segurança da informação) ou um CTO (diretor de tecnologia) é uma das decisões mais importantes que uma empresa toma em tecnologia. O erro custa caro: projetos atrasados, equipes desmotivadas e riscos que só aparecem depois. E o mercado de executivos experientes é pequeno.</p>
+
+<nav class="sumario" aria-label="Nesta matéria"><strong>Nesta matéria</strong><ol>
+<li><a href="#perfil">Defina o perfil antes de buscar</a></li>
+<li><a href="#avaliar">O que avaliar</a></li>
+<li><a href="#sob-demanda">Executivo em tempo integral ou sob demanda</a></li>
+<li><a href="#confidencial">Processo confidencial</a></li>
+</ol></nav>
+
+<h2 id="perfil">Defina o perfil antes de buscar</h2>
+<p>"CISO" e "CTO" significam coisas diferentes em empresas diferentes. Antes de começar, responda:</p>
+<ul>
+<li>A pessoa vai <strong>construir</strong> uma área do zero ou <strong>evoluir</strong> uma área que já existe?</li>
+<li>Quantas pessoas vai liderar, diretamente e por meio de fornecedores?</li>
+<li>A quem vai responder: CEO, conselho ou outra diretoria?</li>
+<li>Quais são as três principais entregas esperadas no primeiro ano?</li>
+<li>Há exigências específicas, como regulação do setor financeiro ou de saúde, certificações ou clientes internacionais?</li>
+</ul>
+
+<h2 id="avaliar">O que avaliar</h2>
+<div class="rolagem"><table class="tabela">
+<thead><tr><th>Dimensão</th><th>CISO</th><th>CTO</th></tr></thead>
+<tbody>
+<tr><td>Técnica</td><td>Gestão de riscos, frameworks (ISO 27001, NIST), resposta a incidentes</td><td>Arquitetura, nuvem, engenharia de software, segurança e custos</td></tr>
+<tr><td>Negócio</td><td>Traduzir riscos em decisões para a diretoria</td><td>Alinhar tecnologia à estratégia e ao orçamento</td></tr>
+<tr><td>Liderança</td><td>Influenciar áreas que não estão sob seu comando</td><td>Formar e reter times técnicos</td></tr>
+<tr><td>Relacionamento</td><td>Clientes, auditores e reguladores</td><td>Fornecedores, parceiros e investidores</td></tr>
+</tbody></table></div>
+<p>Peça exemplos concretos: um incidente que a pessoa conduziu, uma decisão de arquitetura que precisou reverter, um time que montou. Converse com quem trabalhou com ela, sempre com autorização.</p>
+
+<h2 id="sob-demanda">Executivo em tempo integral ou sob demanda</h2>
+<p>Nem toda empresa precisa, ou consegue pagar, um executivo em tempo integral. Um <strong>executivo sob demanda</strong>, alocado por algumas horas por semana ou por um período, pode estruturar a área, contratar o time e preparar a empresa para, mais adiante, ter um executivo próprio. Esse modelo faz sentido especialmente para empresas em crescimento ou em transição.</p>
+
+<h2 id="confidencial">Processo confidencial</h2>
+<p>Muitas buscas executivas precisam de sigilo: o executivo atual ainda está no cargo, há uma reestruturação em curso ou o mercado não pode saber da mudança. Nesses casos:</p>
+<ul>
+<li>A vaga é divulgada sem o nome da empresa, ou nem é divulgada, e a busca é feita por abordagem direta.</li>
+<li>Os detalhes só são compartilhados com os finalistas, mediante compromisso de sigilo.</li>
+<li>O parceiro de recrutamento faz a ponte entre a empresa e os candidatos.</li>
+</ul>
+${AVISO}`
+  },
+  {
+    slug: 'lgpd-no-recrutamento-dados-de-candidatos',
+    titulo: 'LGPD no recrutamento: cuidados com os dados de candidatos',
+    tema: 'Privacidade no RH',
+    data: '2026-11-18',
+    servico: 'recrutamento-e-selecao',
+    descricao: 'Currículos são dados pessoais. Veja como a LGPD se aplica ao recrutamento: o que pedir, por quanto tempo guardar, banco de talentos e direitos dos candidatos.',
+    referencias: [
+      ['Lei nº 13.709/2018 (LGPD), no Planalto', 'https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm'],
+      ['Autoridade Nacional de Proteção de Dados (ANPD)', 'https://www.gov.br/anpd/pt-br'],
+    ],
+    corpo: `
+<p>Todo processo seletivo trata dados pessoais: nome, contato, histórico profissional, às vezes até informações sensíveis. A Lei Geral de Proteção de Dados (LGPD) se aplica a esses dados desde o primeiro currículo recebido, e o cuidado com eles também diz muito sobre a empresa para quem está se candidatando.</p>
+
+<nav class="sumario" aria-label="Nesta matéria"><strong>Nesta matéria</strong><ol>
+<li><a href="#pedir">Peça só o necessário</a></li>
+<li><a href="#sensiveis">Dados sensíveis</a></li>
+<li><a href="#guardar">Por quanto tempo guardar e banco de talentos</a></li>
+<li><a href="#direitos">Direitos dos candidatos</a></li>
+<li><a href="#parceiros">Quando há um parceiro de recrutamento</a></li>
+</ol></nav>
+
+<h2 id="pedir">Peça só o necessário</h2>
+<p>A LGPD tem como princípio a <strong>necessidade</strong>: tratar apenas os dados indispensáveis para a finalidade. No recrutamento, isso significa:</p>
+<ul>
+<li>Na candidatura, pedir só o que serve para avaliar o perfil: contato, experiência, formação e competências.</li>
+<li>Deixar documentos pessoais, como RG, CPF e dados bancários, para a etapa de admissão.</li>
+<li>Evitar perguntas sobre estado civil, filhos, religião ou opinião política, que além de desnecessárias podem levar a discriminação.</li>
+</ul>
+
+<h2 id="sensiveis">Dados sensíveis</h2>
+<p>Dados de saúde, origem racial ou étnica, religião, orientação sexual, filiação sindical e biometria são <strong>dados sensíveis</strong> e têm regras mais rígidas. No recrutamento, eles aparecem principalmente em <strong>vagas afirmativas</strong> e em vagas para pessoas com deficiência. Nesses casos:</p>
+<ul>
+<li>Explique por que a informação é pedida e como será usada.</li>
+<li>Restrinja o acesso a quem realmente precisa.</li>
+<li>Não use a informação para nenhuma outra finalidade.</li>
+</ul>
+
+<h2 id="guardar">Por quanto tempo guardar e banco de talentos</h2>
+<p>A lei não fixa um prazo para guardar currículos, mas exige que os dados sejam eliminados quando a finalidade terminar. Boas práticas:</p>
+<ul>
+<li>Defina um prazo de retenção para os currículos de cada processo e cumpra esse prazo.</li>
+<li>Para manter o currículo em um <strong>banco de talentos</strong>, informe o candidato com clareza, preferencialmente com o consentimento dele, e permita a exclusão a qualquer momento.</li>
+<li>Não deixe currículos espalhados em e-mails, planilhas e pastas compartilhadas: centralize e controle o acesso.</li>
+</ul>
+
+<h2 id="direitos">Direitos dos candidatos</h2>
+<p>O candidato pode pedir acesso aos dados, correção, exclusão e informações sobre com quem eles foram compartilhados. Tenha um canal simples para esses pedidos, como um e-mail informado no aviso de privacidade, e responda dentro do prazo.</p>
+
+<h2 id="parceiros">Quando há um parceiro de recrutamento</h2>
+<p>Quando a empresa contrata uma consultoria de recrutamento, os dados dos candidatos passam por mais de uma organização. Combine em contrato:</p>
+<ul>
+<li>Para que finalidade os dados podem ser usados e com quem podem ser compartilhados.</li>
+<li>Medidas de segurança para guardar e transmitir os currículos.</li>
+<li>O que acontece com os dados ao fim do processo.</li>
+<li>Como serão comunicados incidentes, como vazamentos, que precisam ser avaliados e, quando houver risco relevante, comunicados à ANPD e aos titulares.</li>
+</ul>
 ${AVISO}`
   },
 ];

@@ -52,6 +52,25 @@
   }
 })();
 
+// Formulários comerciais (solicitar profissional, montar squad): monta um e-mail com os campos preenchidos
+(function () {
+  document.querySelectorAll('form.form-email').forEach(function (form) {
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var linhas = [];
+      form.querySelectorAll('input[name], select[name], textarea[name]').forEach(function (campo) {
+        var valor = campo.value.trim();
+        if (!valor) return;
+        linhas.push(campo.tagName === 'TEXTAREA' ? campo.name + ':\n' + valor + '\n' : campo.name + ': ' + valor);
+      });
+      var empresa = form.querySelector('[name="Empresa"]');
+      var assunto = form.getAttribute('data-assunto') + (empresa && empresa.value ? ' — ' + empresa.value.trim() : '');
+      window.location.href = 'mailto:contato@axia.net.br?subject=' + encodeURIComponent(assunto) +
+        '&body=' + encodeURIComponent(linhas.join('\n'));
+    });
+  });
+})();
+
 // Ano no rodapé
 (function () {
   var el = document.getElementById('ano');

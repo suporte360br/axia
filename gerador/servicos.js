@@ -1,240 +1,229 @@
-// Páginas de cada serviço da AXIA (/servicos/<slug>/).
+// Oferta da AXIA: recrutamento e seleção, alocação de profissionais e squads especializados.
 // Depois de editar, rode: node gerador/gerar.js
-// Campos: icone (nome em icones do gerar.js), nome, titulo (aba do navegador e Google), descricao (até ~155 caracteres),
-// chamada (frase sob o H1), paraQuem, entregas [titulo, texto], etapas [titulo, texto], formatos, faq [pergunta, resposta],
-// materias (slugs do blog relacionados) e assunto (pré-seleciona o assunto no formulário de contato).
+//
+// servicos: uma página por serviço em /servicos/<slug>/. Campos: icone (nome em icones do gerar.js), nome, titulo
+// (aba do navegador e Google), descricao (até ~155 caracteres), chamada (frase sob o H1), cartao (texto e itens do
+// cartão na home), intro (HTML), paraQuem, entregasTitulo, entregas [titulo, texto], extras (blocos opcionais:
+// { id, sobretitulo, titulo, texto, itens: [[titulo, texto]], tabela: { colunas, linhas } }), etapas, formatos,
+// faq [pergunta, resposta], materias (slugs do blog) e cta [texto do botão, link].
 
 exports.servicos = [
   {
-    slug: 'ciso-como-servico',
-    icone: 'escudo',
-    nome: 'CISO como Serviço',
-    titulo: 'CISO como Serviço (vCISO): liderança em segurança da informação sob demanda',
-    descricao: 'CISO como Serviço da AXIA: um executivo de segurança da informação em regime parcial para montar e conduzir o programa de segurança da sua empresa.',
-    chamada: 'Um executivo de segurança experiente ao lado da sua equipe, por algumas horas por semana, com responsabilidade sobre o programa de segurança e entregas mensais visíveis.',
-    intro: `<p>O CISO (<em>Chief Information Security Officer</em>) é quem responde pela segurança da informação de uma empresa: define prioridades, cuida das políticas, conversa com a diretoria, com clientes e com auditores. Nas pequenas e médias empresas esse papel quase sempre fica vago, e a segurança se espalha entre o time de TI, fornecedores e boa vontade.</p>
-<p>No modelo <strong>CISO como Serviço</strong>, também chamado de <em>vCISO</em> ou CISO virtual, a AXIA assume essa liderança em regime parcial. Você tem a experiência de um executivo sênior, com escopo e horas ajustados ao tamanho e ao momento da empresa, sem o custo e a demora de contratar alguém em tempo integral.</p>`,
-    paraQuem: [
-      'Clientes corporativos começaram a enviar questionários de segurança e ninguém sabe responder com segurança.',
-      'Investidores, parceiros ou um processo de fusão pedem evidências de segurança e de adequação à LGPD.',
-      'A empresa sofreu um incidente, ou passou perto, e percebeu que não tinha plano nem responsável.',
-      'O time de TI está sobrecarregado e a segurança fica sempre para depois.',
-      'Há gastos com ferramentas de segurança, mas ninguém sabe dizer o que elas protegem de fato.',
-    ],
-    entregas: [
-      ['Diagnóstico de maturidade', 'Entrevistas, revisão de ambiente e de documentos para entender onde a empresa está, usando como referência frameworks reconhecidos, como ISO/IEC 27001 e NIST CSF.'],
-      ['Plano de segurança de 12 meses', 'Lista priorizada do que reduz mais risco por real investido, com responsáveis, prazos e custos estimados.'],
-      ['Políticas e processos', 'Política de segurança, controle de acesso, gestão de vulnerabilidades, backup, resposta a incidentes e uso aceitável, escritas para serem usadas, não arquivadas.'],
-      ['Indicadores para a diretoria', 'Painel simples com a evolução do programa e os principais riscos, apresentado em reuniões periódicas.'],
-      ['Clientes, auditores e fornecedores', 'Resposta a questionários de segurança, apoio em auditorias e avaliação de risco de fornecedores e de ferramentas antes da compra.'],
-      ['Resposta a incidentes', 'Plano de resposta testado e coordenação da reação quando algo acontece.'],
-    ],
-    etapas: [
-      ['Conversa inicial', 'Entendemos o negócio, as exigências de clientes e reguladores e o que motivou a busca.'],
-      ['Diagnóstico', 'Nas primeiras semanas, levantamos riscos, controles existentes e lacunas.'],
-      ['Plano e prioridades', 'Apresentamos o plano de 12 meses à diretoria e combinamos as entregas mensais.'],
-      ['Condução contínua', 'Executamos o plano junto com o seu time e os seus fornecedores, com reporte periódico.'],
-    ],
-    formatos: 'Pacotes mensais de horas, com ponto focal interno na empresa e reuniões de acompanhamento. O escopo é revisto a cada trimestre, conforme a empresa amadurece.',
-    faq: [
-      ['Quantas horas por mês um CISO como serviço dedica à empresa?', 'Depende do porte e do momento. No início, quando há diagnóstico e plano para montar, a dedicação costuma ser maior; depois, o acompanhamento fica mais leve. Definimos as horas na proposta, a partir da conversa inicial.'],
-      ['O CISO como serviço substitui o time de TI?', 'Não. O CISO lidera o programa de segurança, define prioridades e cobra resultados; a execução técnica do dia a dia continua com o time de TI ou com os fornecedores, que ganham direção clara.'],
-      ['Vocês vendem ferramentas de segurança?', 'Não. A AXIA não revende ferramentas, o que permite indicar só o que faz sentido para o risco da empresa.'],
-      ['Em quanto tempo aparecem resultados?', 'O diagnóstico e o plano priorizado ficam prontos nas primeiras semanas. A partir daí, cada mês tem entregas visíveis, como políticas aprovadas, controles implantados e questionários respondidos.'],
-    ],
-    materias: ['o-que-e-ciso-como-servico', 'ransomware-controles-essenciais', 'iso-27001-ou-soc-2'],
-    assunto: 'CISO como Serviço',
-  },
-  {
-    slug: 'cto-como-servico',
-    icone: 'chip',
-    nome: 'CTO como Serviço',
-    titulo: 'CTO como Serviço: liderança de tecnologia sob demanda para a sua empresa',
-    descricao: 'CTO como Serviço da AXIA: liderança técnica em regime parcial para decidir arquitetura, nuvem, fornecedores e organizar o time de tecnologia.',
-    chamada: 'Liderança técnica sob demanda para tirar projetos do papel, decidir arquitetura e fornecedores com segurança e organizar o time de tecnologia.',
-    intro: `<p>Muitas empresas chegam a um ponto em que a tecnologia deixa de ser apoio e passa a ser o próprio negócio: um produto digital, uma integração com clientes, uma migração para a nuvem. Sem alguém com visão técnica e de negócio para decidir, os projetos atrasam, o custo de nuvem cresce sem controle e a dependência de fornecedores aumenta.</p>
-<p>No <strong>CTO como Serviço</strong>, a AXIA ocupa esse papel em regime parcial. Ajudamos a decidir arquitetura, escolher fornecedores, montar o roadmap técnico e organizar o time, sempre com segurança e conformidade embutidas desde o início.</p>`,
-    paraQuem: [
-      'A empresa vai lançar ou reconstruir um produto digital e precisa decidir tecnologia e arquitetura.',
-      'O custo de nuvem ou de software cresceu e ninguém consegue explicar por quê.',
-      'A relação com uma fábrica de software ou fornecedor de TI precisa de alguém que fale a mesma língua.',
-      'O time de tecnologia cresceu sem processos e sem liderança técnica clara.',
-      'Sócios ou investidores pedem uma visão técnica independente antes de uma decisão importante.',
-    ],
-    entregas: [
-      ['Diagnóstico de tecnologia', 'Levantamento de sistemas, arquitetura, custos, contratos e capacidade do time, com riscos e oportunidades.'],
-      ['Roadmap técnico', 'Plano de evolução alinhado aos objetivos do negócio, com prioridades e estimativas.'],
-      ['Arquitetura e nuvem', 'Decisões de arquitetura, uso de nuvem e integrações, com segurança e custo sob controle.'],
-      ['Fornecedores e contratos', 'Apoio na escolha de fornecedores, na definição de escopo e na cobrança de entregas e níveis de serviço.'],
-      ['Organização do time', 'Papéis, processos de desenvolvimento, boas práticas e mentoria das lideranças técnicas.'],
-    ],
-    etapas: [
-      ['Conversa inicial', 'Entendemos o negócio, os projetos em andamento e as decisões que precisam ser tomadas.'],
-      ['Diagnóstico', 'Mapeamos sistemas, custos, contratos e o time.'],
-      ['Roadmap', 'Priorizamos com a diretoria o que fazer, em que ordem e com que recursos.'],
-      ['Condução', 'Acompanhamos a execução, as entregas dos fornecedores e a evolução do time.'],
-    ],
-    formatos: 'Pacotes mensais de horas, ou um projeto com prazo definido, como uma avaliação técnica antes de um investimento ou de uma troca de fornecedor.',
-    faq: [
-      ['Qual a diferença entre CTO como serviço e uma consultoria de TI?', 'A consultoria costuma entregar um projeto específico. O CTO como serviço assume a liderança técnica de forma contínua, participa das decisões e responde pelo resultado junto com a diretoria.'],
-      ['O CTO como serviço programa?', 'O foco é liderança: decisões, arquitetura, fornecedores e time. Quando necessário, revisamos código e arquitetura, mas o desenvolvimento fica com o time ou com os fornecedores.'],
-      ['Dá para contratar só uma avaliação técnica?', 'Sim. Uma avaliação independente da tecnologia antes de um investimento, aquisição ou troca de fornecedor é um formato comum, com prazo e escopo fechados.'],
-    ],
-    materias: ['cto-como-servico', 'o-que-e-ciso-como-servico'],
-    assunto: 'CTO como Serviço',
-  },
-  {
-    slug: 'consultoria-lgpd',
-    icone: 'cadeado',
-    nome: 'Consultoria em privacidade e LGPD',
-    titulo: 'Consultoria LGPD: adequação prática à Lei Geral de Proteção de Dados',
-    descricao: 'Consultoria LGPD da AXIA: mapeamento de dados, bases legais, avisos, contratos, atendimento a titulares e apoio ao encarregado (DPO), de forma prática.',
-    chamada: 'Adequação à Lei Geral de Proteção de Dados (Lei 13.709/2018) que funciona no dia a dia: menos papelada, mais processos que a equipe de fato usa.',
-    intro: `<p>A LGPD vale para qualquer empresa que trate dados pessoais de clientes, funcionários ou parceiros, e a Autoridade Nacional de Proteção de Dados (ANPD) já aplica sanções. Mesmo assim, muitas adequações param em documentos genéricos que ninguém consulta.</p>
-<p>A consultoria LGPD da AXIA parte de como a empresa realmente usa os dados. Mapeamos os tratamentos, definimos as bases legais, ajustamos avisos e contratos, criamos o processo de atendimento aos titulares e preparamos a empresa para responder a incidentes, sempre junto com a segurança da informação, que é o que protege os dados na prática.</p>`,
-    paraQuem: [
-      'A empresa ainda não começou a adequação à LGPD ou parou no meio do caminho.',
-      'Um cliente ou parceiro exigiu cláusulas de proteção de dados ou evidências de adequação.',
-      'A empresa recebeu uma solicitação de titular (acesso, exclusão, correção) e não sabia como responder.',
-      'É preciso indicar um encarregado (DPO) e ele precisa de apoio técnico.',
-      'Houve, ou pode haver, um incidente com dados pessoais.',
-    ],
-    entregas: [
-      ['Mapeamento de dados', 'Inventário dos tratamentos: quais dados, de quem, para quê, onde ficam e com quem são compartilhados.'],
-      ['Bases legais e riscos', 'Definição da base legal de cada tratamento e identificação dos tratamentos de maior risco.'],
-      ['Avisos, políticas e contratos', 'Aviso de privacidade, política interna e cláusulas para contratos com clientes e fornecedores.'],
-      ['Direitos dos titulares', 'Processo e modelos para atender pedidos de acesso, correção, exclusão e portabilidade dentro do prazo.'],
-      ['Incidentes com dados', 'Plano para avaliar, registrar e, quando necessário, comunicar incidentes à ANPD e aos titulares.'],
-      ['Apoio ao encarregado (DPO)', 'Suporte técnico contínuo ao encarregado indicado pela empresa, ou atuação como encarregado em regime de serviço.'],
-    ],
-    etapas: [
-      ['Conversa inicial', 'Entendemos o negócio, os dados tratados e as exigências de clientes.'],
-      ['Mapeamento', 'Entrevistas com as áreas para inventariar os tratamentos de dados.'],
-      ['Adequação', 'Documentos, contratos, processos e controles de segurança priorizados por risco.'],
-      ['Manutenção', 'Acompanhamento periódico, treinamento e apoio ao encarregado.'],
-    ],
-    formatos: 'Projeto de adequação com prazo definido, seguido, se a empresa quiser, de acompanhamento mensal e apoio ao encarregado.',
-    faq: [
-      ['Toda empresa precisa se adequar à LGPD?', 'Toda empresa que trata dados pessoais está sujeita à lei, inclusive dados de funcionários. Agentes de pequeno porte, como microempresas e startups, têm regras simplificadas definidas pela ANPD, mas não ficam dispensados.'],
-      ['Toda empresa precisa ter um encarregado (DPO)?', 'Em regra, sim. A ANPD dispensa agentes de tratamento de pequeno porte de indicar encarregado, desde que mantenham um canal de comunicação com os titulares. Avaliamos o enquadramento da sua empresa.'],
-      ['A consultoria inclui o trabalho jurídico?', 'Cuidamos da parte de processos, dados e segurança. Quando é preciso parecer ou representação jurídica, trabalhamos junto com o advogado da empresa ou indicamos parceiros.'],
-      ['Quanto tempo leva a adequação?', 'Depende do porte e da quantidade de tratamentos. O mapeamento e o plano priorizado saem nas primeiras semanas; o restante é feito por ordem de risco.'],
-    ],
-    materias: ['lgpd-checklist-para-pequenas-e-medias-empresas', 'ransomware-controles-essenciais'],
-    assunto: 'Privacidade e LGPD',
-  },
-  {
-    slug: 'iso-27001-e-soc-2',
-    icone: 'check',
-    nome: 'ISO 27001 e SOC 2',
-    titulo: 'Consultoria ISO 27001 e SOC 2: preparação para certificação e auditoria',
-    descricao: 'Preparação para ISO/IEC 27001, ISO 27701 e SOC 2: escopo, análise de riscos, políticas, controles e evidências até a auditoria independente.',
-    chamada: 'Preparamos a sua empresa para a certificação ISO/IEC 27001 e para o relatório SOC 2, do escopo à auditoria, com controles que fazem sentido para o negócio.',
-    intro: `<p>Clientes corporativos, especialmente no exterior e no setor financeiro, cada vez mais exigem que fornecedores comprovem segurança com uma certificação ISO/IEC 27001 ou com um relatório SOC 2. Os dois exigem um sistema de gestão de segurança funcionando de verdade, com evidências, e não só documentos.</p>
-<p>A AXIA conduz a preparação: definimos o escopo, fazemos a análise de riscos, escrevemos políticas e procedimentos, implantamos os controles com o seu time e organizamos as evidências para a auditoria. A certificação ISO é emitida por um organismo certificador acreditado, e o relatório SOC 2 por uma firma de auditoria independente; nosso papel é deixar a empresa pronta para passar por eles.</p>`,
-    paraQuem: [
-      'Um cliente importante pediu a certificação ISO 27001 ou o relatório SOC 2 como condição de contrato.',
-      'A empresa responde dezenas de questionários de segurança e quer uma prova reconhecida para encurtar as vendas.',
-      'Há planos de vender para fora do Brasil, onde o SOC 2 é muito pedido.',
-      'A empresa quer organizar a segurança com um padrão internacional, mesmo antes de certificar.',
-    ],
-    entregas: [
-      ['Escolha do caminho', 'Análise de qual exigência os seus clientes fazem (ISO 27001, SOC 2 ou ambos) e do escopo mais adequado.'],
-      ['Análise de lacunas', 'Comparação entre o que a empresa já tem e o que a norma ou os critérios exigem.'],
-      ['Análise e tratamento de riscos', 'Metodologia, inventário de ativos, riscos avaliados e plano de tratamento.'],
-      ['Políticas, procedimentos e controles', 'Documentação e implantação dos controles com o seu time, incluindo a Declaração de Aplicabilidade da ISO 27001.'],
-      ['Auditoria interna e preparação', 'Auditoria interna, análise crítica pela direção e organização das evidências para a auditoria externa.'],
-      ['Acompanhamento da auditoria', 'Apoio durante a auditoria e no tratamento de eventuais não conformidades.'],
-    ],
-    etapas: [
-      ['Escopo', 'Definimos o que entra na certificação ou no relatório e o cronograma.'],
-      ['Lacunas e riscos', 'Avaliamos a situação atual e os riscos do escopo.'],
-      ['Implantação', 'Políticas, controles e evidências, priorizados para a auditoria.'],
-      ['Auditoria', 'Auditoria interna, ajustes finais e acompanhamento da auditoria externa.'],
-    ],
-    formatos: 'Projeto com cronograma até a auditoria. Depois da certificação, a manutenção pode seguir no modelo de CISO como Serviço.',
-    faq: [
-      ['Qual a diferença entre ISO 27001 e SOC 2?', 'A ISO/IEC 27001 é uma norma internacional que certifica o sistema de gestão de segurança da informação. O SOC 2 é um relatório de auditoria, criado nos Estados Unidos pelo AICPA, que avalia controles com base nos Trust Services Criteria. A escolha depende do que os seus clientes pedem; explicamos em detalhe no blog.'],
-      ['A AXIA emite a certificação?', 'Não. A certificação ISO é emitida por um organismo certificador acreditado e o relatório SOC 2 por uma firma de auditoria independente. A AXIA prepara a empresa e acompanha o processo.'],
-      ['Quanto tempo leva para ficar pronto para a auditoria?', 'Depende do escopo e da maturidade atual. A análise de lacunas, feita no início, dá o cronograma realista para o seu caso.'],
-      ['E a ISO 27701?', 'A ISO/IEC 27701 estende a 27001 para a gestão de privacidade. Ela pode ser incluída no mesmo projeto, aproveitando o trabalho de adequação à LGPD.'],
-    ],
-    materias: ['iso-27001-ou-soc-2', 'o-que-e-ciso-como-servico'],
-    assunto: 'ISO 27001 / SOC 2',
-  },
-  {
-    slug: 'continuidade-de-negocios',
-    icone: 'ciclo',
-    nome: 'Continuidade de negócios',
-    titulo: 'Plano de continuidade de negócios: BIA, resposta a incidentes e testes',
-    descricao: 'Consultoria em continuidade de negócios: análise de impacto (BIA), plano de continuidade, recuperação de TI, resposta a incidentes e exercícios de mesa.',
-    chamada: 'Planos para a empresa continuar operando quando algo dá errado, testados antes que seja preciso usá-los.',
-    intro: `<p>Um ataque de ransomware, a queda de um fornecedor de nuvem, um incêndio ou a saída de uma pessoa-chave podem parar a operação por dias. A diferença entre um susto e uma crise costuma ser se a empresa sabe, antes, o que é crítico, quanto tempo aguenta parada e quem faz o quê.</p>
-<p>A AXIA monta o programa de continuidade de negócios com base nas boas práticas da ISO 22301: começamos pela análise de impacto no negócio (BIA), definimos estratégias de recuperação, escrevemos planos curtos e práticos e, principalmente, testamos com exercícios.</p>`,
-    paraQuem: [
-      'A empresa depende de sistemas que, se pararem, interrompem vendas ou atendimento.',
-      'Clientes ou reguladores pedem um plano de continuidade documentado e testado.',
-      'Há backup, mas ninguém testou recuperar tudo dentro do prazo que o negócio aguenta.',
-      'A empresa passou por uma interrupção e quer estar preparada para a próxima.',
-    ],
-    entregas: [
-      ['Análise de impacto no negócio (BIA)', 'Processos críticos, impactos de uma parada ao longo do tempo e os tempos máximos de recuperação aceitáveis (RTO e RPO).'],
-      ['Estratégias de recuperação', 'Alternativas para pessoas, locais, tecnologia e fornecedores, com custos comparados.'],
-      ['Plano de continuidade e de crise', 'Planos curtos, com papéis, contatos, fluxos de decisão e comunicação.'],
-      ['Recuperação de TI e backup', 'Plano de recuperação de desastres, revisão da estratégia de backup e testes de restauração.'],
-      ['Resposta a incidentes de segurança', 'Plano integrado ao de continuidade, para ataques como ransomware.'],
-      ['Exercícios de mesa e testes', 'Simulações com a liderança e testes técnicos, com relatório de melhorias.'],
-    ],
-    etapas: [
-      ['Escopo', 'Definimos os processos e as unidades que entram no programa.'],
-      ['BIA e riscos', 'Entrevistas com as áreas para medir impactos e prioridades.'],
-      ['Planos', 'Estratégias e planos escritos com as equipes responsáveis.'],
-      ['Testes', 'Exercícios e testes periódicos para manter os planos vivos.'],
-    ],
-    formatos: 'Projeto para montar o programa, seguido de exercícios periódicos, por exemplo semestrais, para manter os planos atualizados.',
-    faq: [
-      ['O que é BIA?', 'A análise de impacto no negócio (Business Impact Analysis) identifica os processos críticos e mede o impacto de uma parada ao longo do tempo. Ela define quanto tempo cada processo pode ficar parado (RTO) e quanto de dado é aceitável perder (RPO).'],
-      ['Ter backup não basta?', 'O backup é uma parte. Sem saber o que recuperar primeiro, em quanto tempo e quem decide, e sem testar a restauração, o backup pode não salvar a operação no prazo que o negócio precisa.'],
-      ['O que é um exercício de mesa?', 'É uma simulação guiada de um cenário de crise, como um ataque de ransomware, com a liderança reunida. Serve para testar decisões, papéis e comunicação sem parar nada de verdade.'],
-    ],
-    materias: ['plano-de-continuidade-de-negocios', 'ransomware-controles-essenciais'],
-    assunto: 'Continuidade de negócios',
-  },
-  {
-    slug: 'conscientizacao-em-seguranca',
+    slug: 'recrutamento-e-selecao',
     icone: 'pessoas',
-    nome: 'Conscientização e mentoria',
-    titulo: 'Treinamento de conscientização em segurança da informação e mentoria',
-    descricao: 'Treinamentos de conscientização em segurança da informação, simulações de phishing e engenharia social e mentoria para gestores de TI e segurança.',
-    chamada: 'Pessoas preparadas são a melhor defesa. Treinamentos objetivos sobre golpes e boas práticas, simulações e mentoria para quem lidera TI e segurança.',
-    intro: `<p>Grande parte dos incidentes começa com uma ação humana: um clique em um link falso, uma senha repetida, um pagamento feito a um golpista que se passou por fornecedor. Ferramentas ajudam, mas não substituem pessoas que reconhecem o golpe na hora.</p>
-<p>A AXIA leva conscientização em segurança de forma prática e sem jargão: treinamentos curtos com exemplos reais do dia a dia brasileiro, simulações de phishing e engenharia social para medir a evolução e mentoria para gestores que estão assumindo a responsabilidade pela segurança.</p>`,
+    nome: 'Recrutamento e Seleção',
+    titulo: 'Recrutamento e seleção especializados em tecnologia, segurança e dados',
+    descricao: 'Recrutamento e seleção especializados: hunting, avaliação técnica e comportamental e shortlist qualificada de profissionais de tecnologia, segurança e dados.',
+    chamada: 'Encontramos os profissionais certos para os desafios do seu negócio.',
+    cartao: {
+      texto: 'Busca, avaliação e seleção de profissionais especializados, com avaliação técnica e comportamental e shortlist qualificada.',
+      itens: ['Hunting e busca ativa', 'Seleção técnica e comportamental', 'Recrutamento executivo e confidencial'],
+    },
+    intro: `<p>A AXIA conecta empresas a profissionais qualificados por meio de um processo de recrutamento e seleção especializado, que combina conhecimento técnico, avaliação de competências e alinhamento cultural.</p>
+<p>Mais do que divulgar vagas, conduzimos a contratação de ponta a ponta: entendemos a posição, buscamos ativamente quem tem o perfil, inclusive profissionais que não estão procurando emprego, avaliamos o conhecimento técnico e o comportamento e apresentamos uma shortlist enxuta, com parecer objetivo sobre cada candidato. O resultado é menos tempo em entrevistas improdutivas, mais precisão na escolha e menor risco de uma contratação inadequada.</p>`,
     paraQuem: [
-      'A empresa já sofreu golpes por e-mail, WhatsApp ou telefone, ou teme sofrer.',
-      'Clientes, auditorias ou a ISO 27001 exigem evidências de treinamento periódico.',
-      'As áreas financeira e de atendimento lidam com pagamentos e dados sensíveis.',
-      'Um gestor de TI está assumindo a segurança e precisa de orientação de quem já fez.',
+      'A vaga é técnica e o RH tem dificuldade de avaliar se o candidato realmente sabe o que diz saber.',
+      'A posição está aberta há meses e os anúncios não atraem os perfis certos.',
+      'A empresa precisa contratar uma liderança, como gestor, coordenador, CISO ou CTO.',
+      'A contratação é estratégica e precisa ser feita com sigilo.',
+      'O time interno não tem tempo para triar dezenas de currículos e conduzir entrevistas.',
     ],
+    entregasTitulo: 'O que o recrutamento AXIA inclui',
     entregas: [
-      ['Treinamentos de conscientização', 'Sessões curtas, presenciais ou on-line, sobre phishing, golpes do falso fornecedor, senhas, autenticação em dois fatores e proteção de dados.'],
-      ['Conteúdo por área', 'Temas específicos para finanças, atendimento, RH e liderança, que são os alvos mais comuns.'],
-      ['Simulações de phishing', 'Campanhas simuladas, com aviso prévio à diretoria, para medir e acompanhar a evolução.'],
-      ['Indicadores', 'Participação, resultados das simulações e evolução ao longo do tempo, úteis também como evidência para auditorias.'],
-      ['Mentoria de lideranças', 'Encontros periódicos com gestores de TI e segurança para decisões, prioridades e carreira.'],
+      ['Recrutamento especializado', 'Identificação e atração de talentos em Tecnologia, Segurança da Informação, Privacidade, Dados e Gestão.'],
+      ['Hunting e busca ativa', 'Abordagem direta de profissionais, inclusive daqueles que não estão buscando novas oportunidades.'],
+      ['Seleção técnica', 'Avaliação de conhecimentos, experiência prática, certificações e competências específicas da posição.'],
+      ['Avaliação comportamental', 'Análise de comunicação, colaboração, liderança e compatibilidade com a cultura da empresa.'],
+      ['Shortlist qualificada', 'Apresentação de poucos candidatos, já avaliados, com pareceres objetivos para apoiar a decisão.'],
+      ['Recrutamento executivo', 'Busca de gestores, coordenadores, especialistas e lideranças como CISOs e CTOs.'],
+      ['Processos confidenciais', 'Recrutamento para posições estratégicas, com preservação de informações sensíveis.'],
+      ['Acompanhamento da contratação', 'Apoio durante as entrevistas finais, a escolha e a integração do profissional.'],
     ],
     etapas: [
-      ['Diagnóstico', 'Entendemos os riscos de cada área e os golpes mais prováveis.'],
-      ['Programa', 'Montamos um calendário de treinamentos e simulações.'],
-      ['Execução', 'Aplicamos os treinamentos e as campanhas.'],
-      ['Medição', 'Acompanhamos os indicadores e ajustamos o programa.'],
+      ['Entendimento da posição', 'Alinhamos responsabilidades, requisitos, faixa salarial, modelo de trabalho e cultura do time.'],
+      ['Busca e atração', 'Divulgação qualificada e busca ativa nas redes profissionais e na nossa base de talentos.'],
+      ['Avaliação', 'Entrevistas técnicas e comportamentais, validação de experiências e certificações.'],
+      ['Shortlist e decisão', 'Apresentamos os finalistas com parecer e apoiamos a escolha e a integração.'],
     ],
-    formatos: 'Treinamentos avulsos, programa anual com calendário ou mentoria mensal para lideranças.',
+    formatos: 'Recrutamento por posição, recrutamento de várias posições para um mesmo time ou busca executiva confidencial. A condição comercial é definida na proposta, conforme a complexidade da posição.',
     faq: [
-      ['Com que frequência fazer treinamento de segurança?', 'Um treinamento anual é o mínimo exigido por muitas auditorias, mas lembretes curtos ao longo do ano e simulações periódicas funcionam melhor do que uma única sessão longa.'],
-      ['Simulação de phishing não constrange os funcionários?', 'O objetivo é educar, não punir. Os resultados são tratados de forma agregada, quem clica recebe orientação imediata e a diretoria é avisada antes de cada campanha.'],
-      ['O treinamento serve como evidência para ISO 27001 e LGPD?', 'Sim. Registramos participação e conteúdo, que servem como evidência de conscientização para auditorias e para o programa de privacidade.'],
+      ['Qual a diferença entre anunciar uma vaga e contratar o recrutamento da AXIA?', 'Ao anunciar no portal, a vaga é revisada e divulgada para a nossa rede. No recrutamento e seleção, a AXIA conduz o processo inteiro: busca ativa, entrevistas técnicas e comportamentais e uma shortlist de candidatos avaliados.'],
+      ['Vocês fazem recrutamento para quais áreas?', 'Nosso foco é Tecnologia, Segurança da Informação, Privacidade, Dados, Projetos e Gestão de TI, onde a avaliação técnica faz diferença. Para outras áreas, fale com a gente.'],
+      ['Como funciona o recrutamento confidencial?', 'A posição é divulgada sem o nome da empresa, e os detalhes só são compartilhados com os candidatos finalistas, mediante compromisso de sigilo.'],
+      ['Quanto tempo leva um processo seletivo?', 'Depende da senioridade e da raridade do perfil. Combinamos um cronograma realista no início do processo e informamos o andamento em cada etapa.'],
     ],
-    materias: ['ransomware-controles-essenciais', 'lgpd-checklist-para-pequenas-e-medias-empresas'],
-    assunto: 'Outro assunto',
+    materias: ['como-contratar-profissionais-de-seguranca-da-informacao', 'descritivo-de-vaga-de-ti', 'como-contratar-ciso-ou-cto'],
+    cta: ['Encontrar talentos', '/empresas/#profissional'],
   },
+  {
+    slug: 'alocacao-de-profissionais',
+    icone: 'maleta',
+    nome: 'Alocação de Profissionais',
+    titulo: 'Alocação de profissionais especializados e staff augmentation em TI',
+    descricao: 'Alocação de profissionais de tecnologia, segurança e dados: dedicada, parcial, por projeto, staff augmentation e executivos sob demanda.',
+    chamada: 'O talento que sua empresa precisa, pelo tempo que precisar.',
+    cartao: {
+      texto: 'Profissionais especializados integrados à sua operação, com flexibilidade para ampliar, reduzir ou substituir.',
+      itens: ['Alocação dedicada ou parcial', 'Staff augmentation', 'Executivos sob demanda'],
+    },
+    intro: `<p>A AXIA disponibiliza profissionais especializados para integrar as operações dos clientes, com conhecimento técnico, flexibilidade e capacidade de adaptação às necessidades de cada projeto.</p>
+<p>Em vez de abrir um processo de contratação para cada necessidade, a empresa conta com profissionais selecionados e acompanhados pela AXIA, no modelo e pelo período que fizerem sentido. Quando a demanda muda, a equipe pode ser ampliada, reduzida ou ter profissionais substituídos, sem que o cliente precise aumentar o próprio quadro.</p>`,
+    paraQuem: [
+      'Um projeto vai começar e falta gente com a especialidade necessária.',
+      'A demanda é temporária ou sazonal e não justifica uma contratação definitiva.',
+      'A equipe interna está sobrecarregada e precisa de reforço rápido.',
+      'A empresa precisa de uma liderança experiente, como CISO, CTO ou gerente de projetos, por um período.',
+      'É preciso cobrir uma ausência, como licença ou saída de um profissional-chave.',
+    ],
+    entregasTitulo: 'Modelos de alocação',
+    entregas: [
+      ['Alocação dedicada', 'Profissional com dedicação integral à operação do cliente, atuando conforme o escopo e os níveis de serviço contratados.'],
+      ['Alocação parcial', 'Especialistas disponíveis por horas, dias ou períodos previamente definidos, conforme a necessidade.'],
+      ['Alocação por projeto', 'Profissionais contratados para iniciativas com objetivos, entregas e prazos definidos.'],
+      ['Staff augmentation', 'Ampliação da equipe interna com profissionais especializados, sem necessidade de aumentar o quadro próprio.'],
+      ['Executivos sob demanda', 'Alocação de lideranças experientes, como CISO, CTO, gerentes de projetos e especialistas estratégicos.'],
+    ],
+    extras: [
+      {
+        id: 'diferenciais-alocacao',
+        sobretitulo: 'Por que alocar com a AXIA',
+        titulo: 'Flexibilidade com acompanhamento',
+        itens: [
+          ['Acompanhamento da performance', 'Pontos de controle periódicos com o cliente e com o profissional sobre entregas e adaptação.'],
+          ['Ampliação ou redução da equipe', 'A quantidade de profissionais acompanha a demanda do projeto.'],
+          ['Substituição de profissionais', 'Se o encaixe não for o esperado, conduzimos a substituição conforme o combinado em contrato.'],
+          ['Gestão de continuidade', 'Planejamento de férias, ausências e transição de conhecimento para a operação não parar.'],
+          ['Alinhamento às políticas do cliente', 'Os profissionais seguem as normas de segurança, acesso e conduta da empresa contratante.'],
+        ],
+      },
+      {
+        id: 'responsabilidades',
+        sobretitulo: 'Transparência',
+        titulo: 'Quem cuida do quê',
+        texto: 'As responsabilidades são definidas em contrato antes do início. Esta é a divisão mais comum, que pode ser ajustada caso a caso:',
+        tabela: {
+          colunas: ['Tema', 'AXIA', 'Cliente'],
+          linhas: [
+            ['Seleção e vínculo do profissional', 'Seleciona, contrata e responde pelo vínculo', 'Aprova o profissional indicado'],
+            ['Gestão técnica das atividades', 'Acompanha o desempenho e a adaptação', 'Define prioridades e o escopo das entregas'],
+            ['Equipamentos', 'Conforme combinado em contrato', 'Conforme combinado em contrato'],
+            ['Acessos a sistemas', 'Orienta o profissional sobre as regras', 'Concede, revisa e revoga os acessos'],
+            ['Confidencialidade', 'Termo de sigilo assinado pelo profissional', 'Informa as políticas e dados sensíveis'],
+          ],
+        },
+      },
+    ],
+    etapas: [
+      ['Necessidade', 'Entendemos o perfil, o escopo, o modelo de alocação e o prazo de início.'],
+      ['Seleção', 'Indicamos profissionais avaliados técnica e comportamentalmente para aprovação do cliente.'],
+      ['Mobilização', 'Onboarding, acessos, alinhamento de políticas e início das atividades.'],
+      ['Acompanhamento', 'Gestão da alocação, indicadores, ajustes de equipe e continuidade.'],
+    ],
+    formatos: 'Contratos por período, por projeto ou por horas, com possibilidade de ampliação, redução e substituição de profissionais conforme as condições combinadas.',
+    faq: [
+      ['Qual a diferença entre alocação e contratar diretamente?', 'Na alocação, o profissional é selecionado, contratado e acompanhado pela AXIA e presta serviço para o cliente pelo período combinado. É indicado para demandas temporárias, projetos ou quando a empresa não quer aumentar o quadro próprio.'],
+      ['O que é staff augmentation?', 'É o reforço da equipe interna com profissionais especializados de um parceiro, que trabalham junto com o time do cliente nas prioridades definidas por ele.'],
+      ['E se o profissional não se adaptar?', 'Acompanhamos a adaptação desde o início e, se o encaixe não for o esperado, conduzimos a substituição conforme as condições do contrato.'],
+      ['Vocês alocam lideranças, como CISO e CTO?', 'Sim. A alocação de executivos sob demanda permite contar com uma liderança experiente por um período ou em regime parcial.'],
+    ],
+    materias: ['alocacao-de-profissionais-ou-contratacao-direta', 'como-contratar-ciso-ou-cto', 'squad-dedicado-como-montar'],
+    cta: ['Solicitar profissionais', '/empresas/#profissional'],
+  },
+  {
+    slug: 'squads-especializados',
+    icone: 'grafico',
+    nome: 'Squads Especializados',
+    titulo: 'Squads especializados: equipes de tecnologia, segurança e dados sob medida',
+    descricao: 'Squads de segurança da informação, desenvolvimento, dados e projetos: equipes multidisciplinares, escaláveis e orientadas a resultados.',
+    chamada: 'Equipes completas, integradas e prontas para transformar desafios em resultados.',
+    cartao: {
+      texto: 'Equipes multidisciplinares, escaláveis e orientadas a resultados, organizadas em torno dos seus objetivos.',
+      itens: ['Squads gerenciados ou dedicados', 'Segurança, desenvolvimento, dados e projetos', 'Governança e indicadores'],
+    },
+    intro: `<p>Em vez de contratar profissionais isoladamente, a empresa pode contar com uma equipe multidisciplinar organizada em torno de objetivos, projetos e entregas específicas.</p>
+<p>A AXIA monta squads com a combinação certa de perfis e de senioridade, cuida do onboarding e da governança e acompanha os indicadores de entrega. O squad pode trabalhar de forma autônoma, sob gestão da AXIA, ou integrado à equipe interna do cliente.</p>`,
+    paraQuem: [
+      'A empresa tem um projeto com prazo e precisa de uma equipe completa, não de uma pessoa.',
+      'Montar um time do zero levaria meses de recrutamento.',
+      'O produto digital precisa evoluir mais rápido do que a equipe atual consegue.',
+      'A operação de segurança ou de dados precisa de várias especialidades ao mesmo tempo.',
+    ],
+    entregasTitulo: 'Tipos de squad',
+    entregas: [
+      ['Squad de Segurança da Informação', 'Especialistas em SOC, GRC, IAM, gestão de vulnerabilidades, resposta a incidentes e engenharia de segurança.'],
+      ['Squad de Desenvolvimento e Tecnologia', 'Desenvolvedores, arquitetos, DevOps, QA, analistas de sistemas e líderes técnicos.'],
+      ['Squad de Dados e Inteligência Artificial', 'Engenheiros de dados, analistas de BI, cientistas de dados e especialistas em IA.'],
+      ['Squad de Projetos e Transformação', 'Gerentes de projetos, Scrum Masters, Product Owners, analistas de negócios e especialistas em processos.'],
+    ],
+    extras: [
+      {
+        id: 'modelos',
+        sobretitulo: 'Modelos de entrega',
+        titulo: 'Escolha como o squad vai trabalhar',
+        tabela: {
+          colunas: ['Modelo', 'Como funciona'],
+          linhas: [
+            ['Squad gerenciado', 'A AXIA assume a gestão da equipe e das entregas contratadas.'],
+            ['Squad dedicado', 'Equipe exclusiva para as necessidades do cliente.'],
+            ['Squad híbrido', 'Profissionais da AXIA trabalhando com a equipe interna do cliente.'],
+            ['Squad por projeto', 'Equipe estruturada para uma iniciativa com prazo e escopo definidos.'],
+            ['Squad sob demanda', 'Equipe ajustável conforme prioridades e volume de trabalho.'],
+          ],
+        },
+      },
+    ],
+    etapas: [
+      ['Objetivos', 'Definimos com o cliente o que o squad precisa entregar, em que prazo e com quais indicadores.'],
+      ['Composição', 'Montamos a equipe com os perfis, a senioridade e a quantidade adequados.'],
+      ['Onboarding e governança', 'Integração ao ambiente do cliente, rituais, papéis e canais de reporte.'],
+      ['Indicadores e evolução', 'Acompanhamento das entregas e ajuste da composição conforme o andamento.'],
+    ],
+    formatos: 'Squads por projeto, com prazo e escopo definidos, ou contínuos, com composição ajustável ao longo do tempo.',
+    faq: [
+      ['O que é um squad?', 'É uma equipe pequena e multidisciplinar, com os perfis necessários para entregar um objetivo de ponta a ponta, sem depender de várias áreas separadas.'],
+      ['Quem gerencia o squad?', 'Depende do modelo. No squad gerenciado, a AXIA assume a gestão da equipe e das entregas; nos modelos dedicado e híbrido, a gestão do dia a dia é compartilhada com o cliente.'],
+      ['Dá para mudar a composição do squad depois?', 'Sim. A composição pode ser ajustada conforme as prioridades e o volume de trabalho, nas condições combinadas em contrato.'],
+      ['Como acompanho os resultados?', 'Cada squad tem indicadores combinados no início, como entregas, prazos e qualidade, e reportes periódicos.'],
+    ],
+    materias: ['squad-dedicado-como-montar', 'alocacao-de-profissionais-ou-contratacao-direta', 'como-contratar-profissionais-de-seguranca-da-informacao'],
+    cta: ['Montar meu squad', '/empresas/#squad'],
+  },
+];
+
+// Áreas de especialização (página /areas-de-especializacao/ e home)
+exports.areas = [
+  ['escudo', 'Segurança da Informação', 'Analistas de SOC, especialistas em GRC, IAM, gestão de vulnerabilidades, resposta a incidentes, engenharia de segurança e lideranças como CISO.'],
+  ['chip', 'Desenvolvimento e Tecnologia', 'Desenvolvedores back-end, front-end e mobile, arquitetos de software, QA, analistas de sistemas e líderes técnicos.'],
+  ['ciclo', 'Infraestrutura, Cloud e DevOps', 'Engenheiros de cloud, DevOps e SRE, administradores de sistemas, redes e bancos de dados.'],
+  ['grafico', 'Dados e Inteligência Artificial', 'Engenheiros e analistas de dados, analistas de BI, cientistas de dados e especialistas em IA.'],
+  ['documento', 'Projetos e Transformação', 'Gerentes de projetos, PMOs, Scrum Masters, Product Owners, analistas de negócios e de processos.'],
+  ['cadeado', 'Privacidade e GRC', 'Encarregados (DPO), analistas de privacidade, auditores e especialistas em riscos e conformidade.'],
+];
+
+// Diferenciais (compromissos, sem números que ainda não podem ser comprovados)
+exports.diferenciais = [
+  ['Especialização técnica', 'Seleção conduzida com conhecimento real das funções e tecnologias.'],
+  ['Agilidade', 'Processos objetivos para reduzir o tempo de contratação e de mobilização.'],
+  ['Precisão na seleção', 'Avaliação das competências técnicas e comportamentais exigidas.'],
+  ['Flexibilidade', 'Modelos ajustáveis à demanda, ao prazo e ao orçamento.'],
+  ['Acompanhamento', 'Gestão de desempenho, indicadores e evolução das entregas.'],
+  ['Parceria estratégica', 'Relacionamento próximo e alinhamento aos objetivos do negócio.'],
+];
+
+// Por que contratar a AXIA
+exports.porQue = [
+  ['Conhecimento de quem entende de tecnologia', 'Compreendemos as competências, os desafios e as exigências das posições que buscamos.'],
+  ['Foco na qualidade das contratações', 'Valorizamos a experiência, as habilidades técnicas, o perfil comportamental e a aderência às necessidades do cliente.'],
+  ['Agilidade e eficiência', 'Processos estruturados para simplificar a contratação e acelerar a composição de equipes.'],
+  ['Flexibilidade para crescer', 'Alternativas de recrutamento, alocação individual e squads, conforme a necessidade.'],
+  ['Redução da complexidade operacional', 'Apoiamos a busca, a seleção, a mobilização e o acompanhamento dos profissionais.'],
+  ['Relacionamento de longo prazo', 'Buscamos compreender o negócio e construir soluções alinhadas aos objetivos de cada organização.'],
+];
+
+// Perguntas frequentes comerciais (home)
+exports.faqComercial = [
+  ['Qual a diferença entre recrutamento, alocação e squad?', 'No recrutamento e seleção, a AXIA encontra e avalia o profissional, que é contratado diretamente pela sua empresa. Na alocação, o profissional é contratado pela AXIA e presta serviço para você pelo período combinado. No squad, a AXIA fornece uma equipe completa, organizada em torno de um objetivo.'],
+  ['Em quais áreas a AXIA atua?', 'Tecnologia, Segurança da Informação, Infraestrutura e Cloud, Dados e IA, Projetos e Privacidade/GRC, áreas em que a avaliação técnica faz diferença na qualidade da contratação.'],
+  ['Quanto custa?', 'Depende do serviço, da senioridade e do prazo. Depois de entender a necessidade, enviamos uma proposta com o modelo e as condições comerciais.'],
+  ['Como começar?', 'Envie a solicitação de profissional ou de squad pela página Para Empresas, ou agende uma conversa. Retornamos em dias úteis para entender a necessidade.'],
 ];

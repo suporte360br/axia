@@ -1,4 +1,4 @@
-// Páginas do recrutamento e seleção: portal público (/recrutamento/) e área de gestão (/gestao/).
+// Páginas do portal de vagas: portal público (/recrutamento/) e área de gestão (/gestao/).
 // O conteúdo das vagas vem do Supabase pelo navegador (assets/js/recrutamento.js e gestao.js);
 // aqui ficam só as páginas e o formulário no padrão AXIA de descritivo de vaga.
 const fs = require('fs');
@@ -185,11 +185,13 @@ ${gestao ? '' : `
 
   // ---------- Portal público ----------
   {
-    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção']]);
+    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Vagas e carreiras']]);
+    const assuntoBanco = encodeURIComponent('Banco de talentos');
+    const corpoBanco = encodeURIComponent('Olá, quero entrar no banco de talentos da AXIA.\n\nÁrea de atuação:\nSenioridade:\nCidade e estado:\nModelo de trabalho preferido (presencial, híbrido, remoto):\nPretensão salarial:\nLinkedIn:\n\nCurrículo em PDF anexado.\n\nAutorizo a AXIA a manter meu currículo no banco de talentos para me indicar a oportunidades compatíveis. Posso pedir a exclusão a qualquer momento.');
     p['recrutamento/index.html'] = pagina({
       caminho: '/recrutamento/',
-      titulo: 'Recrutamento e seleção: vagas em segurança e tecnologia',
-      descricao: 'Vagas em segurança da informação e tecnologia selecionadas pela AXIA. Empresas enviam o descritivo da vaga para revisão, aprovação e divulgação.',
+      titulo: 'Vagas e carreiras em tecnologia, segurança da informação e dados',
+      descricao: 'Vagas em tecnologia, segurança da informação e dados selecionadas pela AXIA. Veja as oportunidades abertas e cadastre seu currículo no banco de talentos.',
       jsonld: vagas.length ? [t.ld, {
         '@context': 'https://schema.org', '@type': 'ItemList', name: 'Vagas abertas',
         itemListElement: vagas.map((v, i) => ({ '@type': 'ListItem', position: i + 1, url: SITE + R.urlVaga(v.slug, true) }))
@@ -200,11 +202,11 @@ ${gestao ? '' : `
     <section class="cabecalho-pagina">
       <div class="container">
         ${t.html}
-        <h1>Recrutamento e seleção</h1>
-        <p>Vagas em segurança da informação, tecnologia e conformidade. Empresas enviam o descritivo da vaga, a AXIA revisa, aprova, publica e divulga para os profissionais certos.</p>
+        <h1>Vagas e carreiras</h1>
+        <p>Oportunidades em tecnologia, segurança da informação e dados, em contratação direta, alocação e squads. Encontre a sua próxima posição ou cadastre-se no banco de talentos da AXIA.</p>
         <div class="acoes" style="margin-top:24px">
-          <a class="botao botao-laranja" href="/recrutamento/anunciar-vaga/">Anunciar uma vaga</a>
-          <a class="botao botao-contorno" href="#vagas">Ver vagas abertas</a>
+          <a class="botao botao-laranja" href="#vagas">Ver vagas abertas</a>
+          <a class="botao botao-contorno" href="#banco-de-talentos">Enviar currículo</a>
         </div>
         <a class="acesso-admin" href="/gestao/" rel="nofollow">${icones.cadeado}Acesso administrativo <small>(gestores AXIA)</small></a>
       </div>
@@ -226,11 +228,33 @@ ${gestao ? '' : `
           <div class="vazio">
             <div class="icone">${icones.maleta}</div>
             <h3>Nenhuma vaga aberta no momento</h3>
-            <p>Novas oportunidades em segurança da informação e tecnologia são publicadas aqui. Se quiser, envie seu currículo para o nosso banco de talentos.</p>
-            <a class="botao botao-contorno" href="mailto:${EMAIL}?subject=${encodeURIComponent('Banco de talentos')}">Enviar currículo</a>
+            <p>Novas oportunidades são publicadas aqui. Enquanto isso, cadastre seu currículo no banco de talentos: muitas posições são preenchidas antes de serem anunciadas.</p>
+            <a class="botao botao-contorno" href="#banco-de-talentos">Enviar currículo</a>
           </div>
         </template>
         <p class="aviso">${AVISO_GOLPE}</p>
+      </div>
+    </section>
+
+    <section class="secao secao-alt" id="banco-de-talentos" aria-labelledby="banco-titulo">
+      <div class="container dupla servico-intro">
+        <div>
+          <span class="sobretitulo">Banco de talentos</span>
+          <h2 id="banco-titulo">Cadastre seu currículo</h2>
+          <p>A AXIA busca profissionais para recrutamento e seleção, alocação em clientes e squads especializados. Ao entrar no banco de talentos, você pode ser indicado a oportunidades compatíveis com o seu perfil, inclusive antes de elas serem anunciadas.</p>
+          <p><a class="botao botao-primario" href="mailto:${EMAIL}?subject=${assuntoBanco}&body=${corpoBanco}">Enviar currículo por e-mail</a></p>
+          <p class="legenda">Seu currículo é usado apenas para indicar você a oportunidades e pode ser excluído a qualquer momento, a seu pedido. Veja a <a href="/privacidade/">política de privacidade</a>.</p>
+        </div>
+        <aside class="caixa-para-quem">
+          <h2>O que enviar</h2>
+          <ul>
+            <li>Currículo em PDF, com experiências, tecnologias e certificações.</li>
+            <li>Área de atuação e senioridade.</li>
+            <li>Cidade e modelo de trabalho preferido.</li>
+            <li>Pretensão salarial e link do LinkedIn.</li>
+            <li>Não envie documentos pessoais, estado civil ou dados de saúde.</li>
+          </ul>
+        </aside>
       </div>
     </section>
 
@@ -238,8 +262,8 @@ ${gestao ? '' : `
       <div class="container">
         <div class="secao-cabeca">
           <span class="sobretitulo">Para empresas</span>
-          <h2 id="empresas-titulo">Anuncie sua vaga com a AXIA</h2>
-          <p>Você envia o descritivo completo da vaga. Nós cuidamos do restante até os candidatos chegarem.</p>
+          <h2 id="empresas-titulo">Tem uma vaga para preencher?</h2>
+          <p>Anuncie no portal ou deixe a AXIA conduzir o processo seletivo completo, com busca ativa e avaliação técnica.</p>
         </div>
         <div class="grade grade-4">
           <div class="etapa"><span class="num destaque">01</span><h3>Envie o descritivo</h3><p>Preencha o formulário no padrão AXIA: tipo de trabalho, remuneração, hard e soft skills, experiência e processo seletivo.</p></div>
@@ -247,21 +271,15 @@ ${gestao ? '' : `
           <div class="etapa"><span class="num destaque">03</span><h3>Publicamos</h3><p>Aprovada, a vaga ganha uma página própria neste portal, preparada para as buscas de vagas do Google.</p></div>
           <div class="etapa"><span class="num destaque">04</span><h3>Divulgamos</h3><p>Compartilhamos com a nossa rede de profissionais e, se combinado, fazemos a triagem dos currículos.</p></div>
         </div>
-        <p style="margin-top:32px"><a class="botao botao-laranja" href="/recrutamento/anunciar-vaga/">Enviar o descritivo da vaga</a></p>
+        <p class="acoes-chamada" style="margin-top:32px">
+          <a class="botao botao-laranja" href="/recrutamento/anunciar-vaga/">Anunciar uma vaga</a>
+          <a class="botao botao-claro" href="/servicos/recrutamento-e-selecao/">Conhecer o recrutamento AXIA</a>
+        </p>
       </div>
     </section>
 
-    <section class="secao" aria-labelledby="porque-titulo">
+    <section class="secao">
       <div class="container">
-        <div class="secao-cabeca">
-          <span class="sobretitulo">Por que a AXIA</span>
-          <h2 id="porque-titulo">Seleção feita por quem entende da área</h2>
-        </div>
-        <div class="grade grade-3">
-          <div class="servico"><div class="icone">${icones.escudo}</div><h3>Especialistas em segurança e tecnologia</h3><p>Sabemos diferenciar um analista de SOC de um especialista em GRC e o que cada certificação realmente indica.</p></div>
-          <div class="servico"><div class="icone">${icones.documento}</div><h3>Vagas claras e atrativas</h3><p>O padrão AXIA de descritivo deixa claros os requisitos, a faixa salarial e o tipo de trabalho, e atrai candidatos mais alinhados.</p></div>
-          <div class="servico"><div class="icone">${icones.cadeado}</div><h3>Sigilo quando precisar</h3><p>A vaga pode ser publicada como confidencial, sem revelar o nome da empresa até as etapas finais.</p></div>
-        </div>
         <div class="faixa-admin">
           <div class="icone">${icones.cadeado}</div>
           <div><strong>Acesso administrativo</strong><p>Área restrita aos gestores da AXIA para revisar, aprovar e publicar as vagas enviadas.</p></div>
@@ -274,7 +292,7 @@ ${gestao ? '' : `
 
   // Página dinâmica /recrutamento/vaga/?v=<slug>: mostra a vaga recém-aprovada até a página fixa ser gerada
   {
-    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção'], ['/recrutamento/vaga/', 'Vaga']]);
+    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Vagas e carreiras'], ['/recrutamento/vaga/', 'Vaga']]);
     p['recrutamento/vaga/index.html'] = pagina({
       caminho: '/recrutamento/vaga/',
       titulo: 'Vaga',
@@ -296,7 +314,7 @@ ${gestao ? '' : `
   // Página fixa de cada vaga aprovada: /recrutamento/<slug>/ (HTML pronto e JobPosting para o Google Vagas)
   for (const v of vagas) {
     const caminho = R.urlVaga(v.slug, true);
-    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção'], [caminho, v.titulo]]);
+    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Vagas e carreiras'], [caminho, v.titulo]]);
     const { titulo, descricao } = R.metaVaga(v);
     p[`recrutamento/${v.slug}/index.html`] = pagina({
       caminho, titulo, descricao,
@@ -313,7 +331,7 @@ ${gestao ? '' : `
 
   // Formulário para as empresas
   {
-    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Recrutamento e seleção'], ['/recrutamento/anunciar-vaga/', 'Anunciar uma vaga']]);
+    const t = trilha([['/', 'Início'], ['/recrutamento/', 'Vagas e carreiras'], ['/recrutamento/anunciar-vaga/', 'Anunciar uma vaga']]);
     p['recrutamento/anunciar-vaga/index.html'] = pagina({
       caminho: '/recrutamento/anunciar-vaga/',
       titulo: 'Anunciar uma vaga',

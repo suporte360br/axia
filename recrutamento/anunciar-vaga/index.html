@@ -29,8 +29,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600&family=Inter:wght@400;500;600;700&display=swap">
-  <link rel="stylesheet" href="/assets/css/style.css?v=74456638">
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://axia.net.br/"},{"@type":"ListItem","position":2,"name":"Recrutamento e seleção","item":"https://axia.net.br/recrutamento/"},{"@type":"ListItem","position":3,"name":"Anunciar uma vaga","item":"https://axia.net.br/recrutamento/anunciar-vaga/"}]}</script>
+  <link rel="stylesheet" href="/assets/css/style.css?v=30828819">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Início","item":"https://axia.net.br/"},{"@type":"ListItem","position":2,"name":"Vagas e carreiras","item":"https://axia.net.br/recrutamento/"},{"@type":"ListItem","position":3,"name":"Anunciar uma vaga","item":"https://axia.net.br/recrutamento/anunciar-vaga/"}]}</script>
 </head>
 <body data-pagina="anunciar">
   <a class="pular" href="#conteudo">Pular para o conteúdo</a>
@@ -44,12 +44,13 @@
       </button>
       <nav class="menu" id="menu" aria-label="Principal">
         <ul>
-          <li><a href="/">Início</a></li>
-          <li><a href="/servicos/">Serviços</a></li>
-          <li><a href="/recrutamento/" aria-current="page">Recrutamento</a></li>
-          <li><a href="/sobre/">Sobre</a></li>
+          <li><a href="/servicos/recrutamento-e-selecao/">Recrutamento</a></li>
+          <li><a href="/servicos/alocacao-de-profissionais/">Alocação</a></li>
+          <li><a href="/servicos/squads-especializados/">Squads</a></li>
+          <li><a href="/recrutamento/" aria-current="page">Vagas</a></li>
           <li><a href="/blog/">Blog</a></li>
-          <li><a class="cta-menu" href="/contato/">Fale conosco</a></li>
+          <li><a href="/sobre/">Sobre</a></li>
+          <li><a class="cta-menu" href="/empresas/">Para empresas</a></li>
         </ul>
       </nav>
     </div>
@@ -59,7 +60,7 @@
 
     <section class="cabecalho-pagina">
       <div class="container">
-        <nav class="trilha" aria-label="Você está em"><ol><li><a href="/">Início</a></li><li><a href="/recrutamento/">Recrutamento e seleção</a></li><li aria-current="page">Anunciar uma vaga</li></ol></nav>
+        <nav class="trilha" aria-label="Você está em"><ol><li><a href="/">Início</a></li><li><a href="/recrutamento/">Vagas e carreiras</a></li><li aria-current="page">Anunciar uma vaga</li></ol></nav>
         <h1>Anunciar uma vaga</h1>
         <p>Preencha o descritivo completo. Ao enviar, a vaga entra para aprovação da AXIA: revisamos, falamos com você se precisar de ajustes e, aprovada, publicamos e divulgamos.</p>
       </div>
@@ -247,30 +248,33 @@ Entrevista com o gestor"></textarea></label>
       <div class="colunas">
         <div>
           <img class="logo-rodape" src="/assets/img/simbolo-300.webp" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
-          <p>Consultoria em segurança da informação, tecnologia, privacidade e conformidade. CISO e CTO como serviço para empresas que precisam de liderança experiente sem o custo de um executivo em tempo integral.</p>
+          <p>Recrutamento e seleção, alocação de profissionais e squads especializados em tecnologia, segurança da informação e dados. O talento certo, a equipe ideal e o resultado que o seu negócio precisa.</p>
         </div>
         <div>
-          <h2>Navegação</h2>
+          <h2>Soluções</h2>
           <ul>
-            <li><a href="/servicos/">Serviços</a></li>
-            <li><a href="/recrutamento/">Recrutamento e seleção</a></li>
-            <li><a href="/sobre/">Sobre a AXIA</a></li>
-            <li><a href="/blog/">Blog</a></li>
-            <li><a href="/contato/">Contato</a></li>
+            <li><a href="/servicos/recrutamento-e-selecao/">Recrutamento e Seleção</a></li>
+            <li><a href="/servicos/alocacao-de-profissionais/">Alocação de Profissionais</a></li>
+            <li><a href="/servicos/squads-especializados/">Squads Especializados</a></li>
+            <li><a href="/areas-de-especializacao/">Áreas de especialização</a></li>
+            <li><a href="/por-que-a-axia/">Por que a AXIA</a></li>
           </ul>
         </div>
         <div>
-          <h2>Contato</h2>
+          <h2>Empresas e candidatos</h2>
           <ul>
+            <li><a href="/empresas/">Para empresas</a></li>
+            <li><a href="/recrutamento/">Vagas e carreiras</a></li>
+            <li><a href="/recrutamento/#banco-de-talentos">Banco de talentos</a></li>
+            <li><a href="/contato/">Contato</a></li>
             <li><a href="mailto:contato@axia.net.br">contato@axia.net.br</a></li>
-            <li>São Paulo – SP</li>
             <li><a href="/privacidade/">Política de privacidade</a></li>
           </ul>
         </div>
       </div>
       <div class="base">
         <span>© <span id="ano">2026</span> AXIA. Todos os direitos reservados.</span>
-        <span>Segurança, tecnologia e conformidade</span>
+        <span>Tecnologia · Segurança · Talentos</span>
       </div>
     </div>
   </footer>
@@ -278,6 +282,6 @@ Entrevista com o gestor"></textarea></label>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.3/dist/umd/supabase.js" defer></script>
   <script src="/assets/js/vaga-render.js?v=26443072" defer></script>
   <script src="/assets/js/recrutamento.js?v=9f66a17f" defer></script>
-  <script src="/assets/js/main.js?v=d2b55230" defer></script>
+  <script src="/assets/js/main.js?v=91bf4062" defer></script>
 </body>
 </html>
