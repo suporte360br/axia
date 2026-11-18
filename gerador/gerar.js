@@ -20,7 +20,7 @@ const SOCIOS = [
   },
   {
     id: 'fabio-marostica', nome: 'Fábio Maróstica', iniciais: 'FM', cargo: 'Sócio fundador da AXIA',
-    linkedin: 'https://www.linkedin.com/in/fabiomarostica/', foto: '',
+    linkedin: 'https://www.linkedin.com/in/fabiomarostica/', foto: 'fabio-marostica.webp',
     bio: 'Sócio fundador da AXIA, empresa de recrutamento e seleção, alocação de profissionais e squads especializados em tecnologia, segurança da informação e dados.',
   },
 ];
