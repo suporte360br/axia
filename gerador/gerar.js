@@ -11,14 +11,28 @@ const SITE = 'https://axia.net.br';
 const NOME = 'AXIA';
 const EMAIL = 'contato@axia.net.br';
 
-// Autor das matérias (perfil na página Sobre)
-const AUTOR = {
-  nome: 'Rogério Gomes',
-  cargo: 'Fundador da AXIA',
-  url: '/sobre/#rogerio-gomes',
-  bio: 'Fundador da AXIA, empresa de recrutamento e seleção, alocação de profissionais e squads especializados em tecnologia, segurança da informação e dados.',
-};
-const AUTOR_LD = { '@type': 'Person', name: AUTOR.nome, jobTitle: AUTOR.cargo, url: SITE + AUTOR.url, worksFor: { '@id': SITE + '/#organizacao' } };
+// Sócios fundadores (seção "Quem conduz" da página Sobre). foto: arquivo em assets/img; sem foto, aparecem as iniciais.
+const SOCIOS = [
+  {
+    id: 'rogerio-gomes', nome: 'Rogério Gomes', iniciais: 'RG', cargo: 'Sócio fundador da AXIA',
+    linkedin: 'https://www.linkedin.com/in/rogerig/', foto: 'rogerio-gomes.webp',
+    bio: 'Sócio fundador da AXIA, empresa de recrutamento e seleção, alocação de profissionais e squads especializados em tecnologia, segurança da informação e dados.',
+  },
+  {
+    id: 'fabio-marostica', nome: 'Fábio Maróstica', iniciais: 'FM', cargo: 'Sócio fundador da AXIA',
+    linkedin: 'https://www.linkedin.com/in/fabiomarostica/', foto: '',
+    bio: 'Sócio fundador da AXIA, empresa de recrutamento e seleção, alocação de profissionais e squads especializados em tecnologia, segurança da informação e dados.',
+  },
+];
+const socioLD = s => ({ '@type': 'Person', '@id': `${SITE}/sobre/#${s.id}`, name: s.nome, jobTitle: s.cargo, url: `${SITE}/sobre/#${s.id}`, sameAs: [s.linkedin], ...(s.foto ? { image: `${SITE}/assets/img/${s.foto}` } : {}), worksFor: { '@id': SITE + '/#organizacao' } });
+// Foto (ou iniciais) com link para o LinkedIn
+const fotoSocio = (s, classe = '') => `<a class="autor-foto${classe}" href="${s.linkedin}" target="_blank" rel="noopener" aria-label="${s.nome} no LinkedIn">${s.foto
+  ? `<img src="/assets/img/${s.foto}" alt="Foto de ${s.nome}" width="240" height="240" loading="lazy">`
+  : `<span class="autor-inicial" aria-hidden="true">${s.iniciais}</span>`}</a>`;
+
+// Autor das matérias do blog
+const AUTOR = { ...SOCIOS[0], url: '/sobre/#rogerio-gomes' };
+const AUTOR_LD = socioLD(AUTOR);
 
 // Data da última mudança no texto da política de privacidade (fixa, para o site não mudar a cada geração)
 const PRIVACIDADE_ATUALIZADA = '2026-11-18';
@@ -693,7 +707,7 @@ for (const sv of servicos) {
     caminho: '/sobre/',
     titulo: 'Sobre a AXIA: recrutamento, alocação e squads em tecnologia',
     descricao: 'Conheça a AXIA, parceira estratégica em recrutamento e seleção, alocação de profissionais e squads especializados em tecnologia, segurança e dados.',
-    jsonld: [t.ld, ORG, { '@context': 'https://schema.org', ...AUTOR_LD, '@id': SITE + AUTOR.url, description: AUTOR.bio }],
+    jsonld: [t.ld, { ...ORG, founder: SOCIOS.map(s => ({ '@id': `${SITE}/sobre/#${s.id}` })) }, ...SOCIOS.map(s => ({ '@context': 'https://schema.org', ...socioLD(s), description: s.bio }))],
     conteudo: `
     <section class="cabecalho-pagina">
       <div class="container">
@@ -714,12 +728,20 @@ for (const sv of servicos) {
         <img src="/assets/img/simbolo.webp" srcset="/assets/img/simbolo-300.webp 300w, /assets/img/simbolo.webp 600w" sizes="(max-width: 760px) 70vw, 420px" alt="Símbolo da AXIA: a letra A em prata cortada por um arco laranja" width="600" height="480" loading="lazy" style="box-shadow:none;max-width:420px;justify-self:center">
       </div>
     </section>
-    <section class="secao" id="rogerio-gomes" style="padding-top:0">
-      <div class="container" style="max-width:820px">
+    <section class="secao" id="quem-conduz" style="padding-top:0" aria-labelledby="socios-titulo">
+      <div class="container">
         <span class="sobretitulo">Quem conduz</span>
-        <div class="autor autor-grande">
-          <div class="autor-inicial" aria-hidden="true">RG</div>
-          <div><h2 style="margin:0">${AUTOR.nome}</h2><p class="meta" style="margin:2px 0 8px">${AUTOR.cargo}</p><p>${AUTOR.bio}</p><p>Assina as matérias do <a href="/blog/">blog da AXIA</a>.</p></div>
+        <h2 id="socios-titulo" class="visualmente-oculto">Sócios fundadores</h2>
+        <div class="socios">
+          ${SOCIOS.map(s => `<div class="autor autor-grande" id="${s.id}">
+            ${fotoSocio(s)}
+            <div>
+              <h3 style="margin:0"><a href="${s.linkedin}" target="_blank" rel="noopener">${s.nome}</a></h3>
+              <p class="meta" style="margin:2px 0 8px">${s.cargo}</p>
+              <p>${s.bio}</p>
+              <p><a class="link-linkedin" href="${s.linkedin}" target="_blank" rel="noopener">Ver perfil no LinkedIn</a></p>
+            </div>
+          </div>`).join('\n          ')}
         </div>
       </div>
     </section>
@@ -860,7 +882,7 @@ for (const m of ordenadas) {
       ${placa(m, ' capa')}
       ${corpoCompleto(m)}
       <aside class="autor" aria-label="Sobre o autor">
-        <div class="autor-inicial" aria-hidden="true">RG</div>
+        ${fotoSocio(AUTOR)}
         <div><strong><a href="${AUTOR.url}">${AUTOR.nome}</a></strong> <span>· ${AUTOR.cargo}</span><p>${AUTOR.bio}</p></div>
       </aside>
       <div class="chamada" style="margin-top:40px;padding:32px">

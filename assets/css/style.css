@@ -411,3 +411,18 @@ dialog .acoes { display: flex; gap: 10px; }
 .tabela-larga { min-width: 560px; }
 .tabela-larga td, .tabela-larga th { padding: 12px 14px; }
 .dupla > * { min-width: 0; } .dupla img { width: 100%; height: auto; }
+
+/* Sócios fundadores */
+.socios { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); gap: 20px; margin-top: 12px; }
+.socios .autor { margin-top: 0; height: 100%; }
+.autor-foto { flex: none; display: block; border-radius: 50%; text-decoration: none; transition: transform .15s, box-shadow .15s; }
+.autor-foto:hover { transform: scale(1.04); box-shadow: 0 0 0 3px var(--laranja); }
+.autor-foto img { display: block; width: 52px; height: 52px; border-radius: 50%; object-fit: cover; }
+.autor-grande .autor-foto img { width: 96px; height: 96px; }
+.autor-grande .autor-foto .autor-inicial { width: 96px; height: 96px; font-size: 1.6rem; }
+.autor h3 a { color: var(--tinta); text-decoration: none; }
+.autor h3 a:hover { color: var(--laranja-escuro); }
+.link-linkedin { font-weight: 600; color: var(--laranja-escuro); }
+.visualmente-oculto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.autor .autor-foto img { border-radius: 50%; }
+.autor .autor-foto .autor-inicial { color: #fff; font-size: 1.6rem; }
