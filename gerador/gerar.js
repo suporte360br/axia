@@ -38,9 +38,12 @@ const AUTOR_LD = socioLD(AUTOR);
 const PRIVACIDADE_ATUALIZADA = '2026-11-18';
 
 // Vagas aprovadas no Supabase: buscar-vagas.js atualiza vagas-publicas.json (sem conexão, fica o anterior)
-try { require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'buscar-vagas.js')], { stdio: 'inherit' }); } catch { /* segue com o arquivo anterior */ }
+// SEM_BUSCA=1 gera sem consultar o banco (usa o vagas-publicas.json atual; útil para testes)
+if (!process.env.SEM_BUSCA) try { require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'buscar-vagas.js')], { stdio: 'inherit' }); } catch { /* segue com o arquivo anterior */ }
 const ARQ_VAGAS = path.join(__dirname, 'vagas-publicas.json');
-const vagasPublicas = fs.existsSync(ARQ_VAGAS) ? JSON.parse(fs.readFileSync(ARQ_VAGAS, 'utf8')) : [];
+// O slug vira nome de pasta e entra em scripts da página: só aceita o formato gerado pelo banco (a-z, 0-9 e hífen)
+const vagasPublicas = (fs.existsSync(ARQ_VAGAS) ? JSON.parse(fs.readFileSync(ARQ_VAGAS, 'utf8')) : [])
+  .filter(v => /^[a-z0-9-]{3,200}$/.test(String(v.slug)));
 
 // Versão do arquivo nos links (?v=); ignora CRLF/LF para dar o mesmo valor no Windows e na GitHub Action
 const hash = f => { const b = fs.readFileSync(path.join(RAIZ, f)); return crypto.createHash('md5').update(/\.(css|js)$/.test(f) ? b.toString('utf8').replace(/\r\n/g, '\n') : b).digest('hex').slice(0, 8); };
@@ -48,6 +51,9 @@ const V_CSS = hash('assets/css/style.css');
 const V_JS = hash('assets/js/main.js');
 const V_ICO = hash('favicon.ico');
 
+// JSON para dentro de <script>: escapa < > & (e separadores de linha) para que dados enviados por terceiros,
+// como o título de uma vaga com "</script>", não consigam fechar o bloco e injetar código na página
+const jsonSeguro = o => JSON.stringify(o).replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026').replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
 const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 const dataBR = d => new Date(d + 'T12:00:00').toLocaleDateString('pt-BR', { day: 'numeric', month: 'long', year: 'numeric' });
 // Mais recentes primeiro; na mesma data, vale a ordem do conteudo.js
@@ -110,7 +116,7 @@ function pagina({ caminho, titulo, descricao, conteudo, imagem = 'og.jpg', tipo 
     const atual = caminho.startsWith(href);
     return `<li><a href="${href}"${atual ? ' aria-current="page"' : ''}>${txt}</a></li>`;
   }).join('\n          ');
-  const ld = jsonld.map(o => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n  ');
+  const ld = jsonld.map(o => `<script type="application/ld+json">${jsonSeguro(o)}</script>`).join('\n  ');
   return `<!doctype html>
 <html lang="pt-BR">
 <head>
