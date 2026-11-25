@@ -180,6 +180,7 @@ ${gestao ? rodapeGestao() : `  <footer class="rodape">
         <div>
           <img class="logo-rodape" src="/assets/img/simbolo-300.webp" alt="Símbolo da AXIA" width="96" height="77" loading="lazy">
           <p>Recrutamento e seleção, alocação de profissionais e squads especializados em tecnologia, segurança da informação e dados. O talento certo, a equipe ideal e o resultado que o seu negócio precisa.</p>
+          <iframe class="selo-scorecard" src="https://scores.securityscorecard.io/security-rating/badge/axia.net.br" width="256" height="100" title="Nota de segurança da AXIA no SecurityScorecard" loading="lazy" referrerpolicy="no-referrer"></iframe>
         </div>
         <div>
           <h2>Soluções</h2>

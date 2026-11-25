@@ -426,3 +426,4 @@ dialog .acoes { display: flex; gap: 10px; }
 .visualmente-oculto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 .autor .autor-foto img { border-radius: 50%; }
 .autor .autor-foto .autor-inicial { color: #fff; font-size: 1.6rem; }
+.selo-scorecard { display: block; border: 0; margin-top: 16px; max-width: 100%; background: #fff; border-radius: 10px; }
