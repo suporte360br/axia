@@ -3,6 +3,8 @@
 (() => {
   const cfg = window.AXIA_CONFIG || {};
   const DEMO = !cfg.supabaseUrl || !cfg.supabaseAnonKey;
+  // Vagas escondidas do site público (config.js → vagasOcultas)
+  const visivel = (v) => !(cfg.vagasOcultas || []).includes(v.codigo);
   const sb = DEMO || !window.supabase ? null : window.supabase.createClient(cfg.supabaseUrl, cfg.supabaseAnonKey);
   const $ = (s) => document.querySelector(s);
   const qs = (k) => new URLSearchParams(location.search).get(k);
@@ -99,8 +101,8 @@
       d.vagas.push(v); demo.salvar(d);
       return v.codigo;
     },
-    async vagasPublicas() { return DEMO ? demoPublicas() : rpc('vagas_publicas'); },
-    async vagaPublica(slug) { return DEMO ? demoPublicas().find((v) => v.slug === slug) || null : (await rpc('vaga_publica', { p_slug: slug }))[0] || null; },
+    async vagasPublicas() { return (DEMO ? demoPublicas() : await rpc('vagas_publicas')).filter(visivel); },
+    async vagaPublica(slug) { const v = DEMO ? demoPublicas().find((x) => x.slug === slug) : (await rpc('vaga_publica', { p_slug: slug }))[0]; return v && visivel(v) ? v : null; },
 
     // Login dos gestores
     async enviarCodigo(celular, canal) {

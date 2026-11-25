@@ -8,4 +8,8 @@ window.AXIA_CONFIG = {
 
   // Canais para receber o código de login dos gestores, na ordem de preferência.
   canais: ['sms'],
+
+  // Vagas aprovadas que não devem aparecer no site (código AX-…), por exemplo vagas de teste.
+  // O gerador e o navegador escondem essas vagas; o ideal é também encerrá-las na área de gestão.
+  vagasOcultas: ['AX-0001'],
 };

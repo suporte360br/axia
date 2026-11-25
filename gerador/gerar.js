@@ -42,8 +42,11 @@ const PRIVACIDADE_ATUALIZADA = '2026-11-18';
 if (!process.env.SEM_BUSCA) try { require('child_process').execFileSync(process.execPath, [path.join(__dirname, 'buscar-vagas.js')], { stdio: 'inherit' }); } catch { /* segue com o arquivo anterior */ }
 const ARQ_VAGAS = path.join(__dirname, 'vagas-publicas.json');
 // O slug vira nome de pasta e entra em scripts da página: só aceita o formato gerado pelo banco (a-z, 0-9 e hífen)
+// Vagas listadas em vagasOcultas no config.js (ex.: vagas de teste) não entram no site
+const VAGAS_OCULTAS = ((fs.readFileSync(path.join(RAIZ, 'assets/js/config.js'), 'utf8').match(/vagasOcultas:\s*\[([^\]]*)\]/) || [])[1] || '')
+  .match(/AX-\d+/g) || [];
 const vagasPublicas = (fs.existsSync(ARQ_VAGAS) ? JSON.parse(fs.readFileSync(ARQ_VAGAS, 'utf8')) : [])
-  .filter(v => /^[a-z0-9-]{3,200}$/.test(String(v.slug)));
+  .filter(v => /^[a-z0-9-]{3,200}$/.test(String(v.slug)) && !VAGAS_OCULTAS.includes(v.codigo));
 
 // Versão do arquivo nos links (?v=); ignora CRLF/LF para dar o mesmo valor no Windows e na GitHub Action
 const hash = f => { const b = fs.readFileSync(path.join(RAIZ, f)); return crypto.createHash('md5').update(/\.(css|js)$/.test(f) ? b.toString('utf8').replace(/\r\n/g, '\n') : b).digest('hex').slice(0, 8); };
